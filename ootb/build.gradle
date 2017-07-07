@@ -1,0 +1,130 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        //applicationId "com.deanlib.ootb"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+
+    compile 'org.xutils:xutils:3.5.0'
+    compile 'com.alibaba:fastjson:1.2.31'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+    compile 'com.inkapplications.viewpageindicator:library:2.4.3'
+}
+
+//添加插件
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+//定义版本
+version = "0.0.5"
+
+//定义相当网站
+def siteUrl = 'https://github.com/Dean1990/OOTB'    // project homepage
+def gitUrl = 'https://github.com/Dean1990/OOTB.git' // project git
+
+//定义GROUP
+group = "com.deanlib.ootb"
+
+//定义pom并打包aar
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name 'Out Of The Box'//一些描述
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {//开发者信息
+                        id ''
+                        name 'Dean'
+                        email 'abcruoshui@sina.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+//打包javadocjar和sourcejar
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+javadoc {
+    options{
+        encoding 'UTF-8'
+        charSet 'UTF-8'
+        author true
+    }
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+//上传到maven仓库,从local.properties读取user和apikey
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    //organization = properties.getProperty("bintray.organization")
+    pkg {
+        repo = "maven"
+        name = "OOTB"                // project name in maven
+        userOrg = 'deanlib'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
