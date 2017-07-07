@@ -1,7 +1,7 @@
 package com.deanlib.ootb.data.io;
 
 /**
- * 默认的ResultCode类
+ * 提供默认的ResultCode类以方便使用
  *
  * successCode = "200"
  *

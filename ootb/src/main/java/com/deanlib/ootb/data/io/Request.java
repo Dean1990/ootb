@@ -1,7 +1,7 @@
 package com.deanlib.ootb.data.io;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -23,7 +23,7 @@ import java.util.TreeMap;
 
 /**
  * 网络请求的基类
- *
+ * <p>
  * Created by dean on 2017/4/19.
  */
 public abstract class Request {
@@ -55,7 +55,7 @@ public abstract class Request {
 //	/** Https 证书验证对象 */
 //	private static SSLContext s_sSLContext = null;
 
-    static ProgressDialog mDialog;
+    static Dialog mDialog;
 
     public Request(Context context) {
 
@@ -74,6 +74,7 @@ public abstract class Request {
 
     /**
      * 设置是否使用缓存
+     *
      * @param isCache
      * @return
      */
@@ -87,6 +88,7 @@ public abstract class Request {
 
     /**
      * 是否使用缓存
+     *
      * @return
      */
     public boolean isCache() {
@@ -99,6 +101,7 @@ public abstract class Request {
 
     /**
      * 设置是否显示服务器返回的信息
+     *
      * @param isShowServerMsg
      * @return
      */
@@ -111,6 +114,7 @@ public abstract class Request {
 
     /**
      * 是否显示服务器返回的信息
+     *
      * @return
      */
     public boolean isShowServerMsg() {
@@ -138,6 +142,19 @@ public abstract class Request {
 
     }
 
+    /**
+     * 设置加载框
+     * @param iLoadingDialog
+     * @return
+     */
+    public Request setLoadingDialog(ILoadingDialog iLoadingDialog){
+
+        this.iLoadingDialog = iLoadingDialog;
+
+        return this;
+
+    }
+
     //默认加签名
 //    static boolean needSign = true;
 
@@ -152,6 +169,7 @@ public abstract class Request {
 
     /**
      * 设置是否加签名
+     *
      * @param needSign
      * @return
      */
@@ -165,26 +183,29 @@ public abstract class Request {
 
     public static IRequestParam iRequestParam;
     public static IResultCode iResultCode;
+    public static ILoadingDialog iLoadingDialog;
 
 
     /**
      * 执行网络请求方法
      * 加载框默认打开
+     *
      * @param callback 回调函数
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T>Callback.Cancelable execute(RequestCallback callback) {
+    public <T> Callback.Cancelable execute(RequestCallback callback) {
 
         return execute(true, callback);
     }
 
     /**
      * 执行网络请求方法
+     *
      * @param showDialog 是否显示加载框
-     * @param callback 回调函数
+     * @param callback   回调函数
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T>Callback.Cancelable execute(boolean showDialog, final RequestCallback callback) {
+    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback) {
 
         if (showDialog)
             showLoadingDialog();
@@ -200,7 +221,7 @@ public abstract class Request {
             }
         }
 
-            RequestParams params = iRequestParam!=null?iRequestParam.disposeParam(params()):params();
+        RequestParams params = iRequestParam != null ? iRequestParam.disposeParam(params()) : params();
 
 
 //        if(needSign){
@@ -277,6 +298,7 @@ public abstract class Request {
 
     /**
      * 签名方法
+     *
      * @param params
      * @return 得到一个MD5
      */
@@ -321,7 +343,6 @@ public abstract class Request {
 
     /**
      * 解析JSON任务
-     *
      */
     class ParseTask<T> extends AsyncTask<Void, Void, Result> {
 
@@ -340,37 +361,45 @@ public abstract class Request {
 
         @Override
         protected Result doInBackground(Void... params) {
-            if (callback == null) {
+            if (iResultCode != null) {
 
-                Result mResult = new Result();
+                if (callback == null) {
 
-                mResult.code = "-1";
+                    Result mResult = new Result();
 
-                mResult.msg = "RequestCallback is null";
+                    mResult.code = "-1";
 
+                    mResult.msg = "RequestCallback is null";
+
+                    return mResult;
+
+                }
+                Result mResult;
+                try {
+
+                    mResult = JSON.parseObject(json, Result.class);
+
+                    if (mResult != null)
+
+                        if (iResultCode.successCode.equals(mResult.code)) {
+
+                            t = parse(json);
+
+                        }
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                    return null;
+                }
                 return mResult;
+            } else {
 
-            }
-            Result mResult;
-            try {
-
-                mResult = JSON.parseObject(json, Result.class);
-
-                if (mResult != null)
-
-                    if (iResultCode.successCode.equals(mResult.code)) {
-
-                        t = parse(json);
-
-                    }
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
+                t = parse(json);
 
                 return null;
             }
-            return mResult;
         }
 
         @Override
@@ -378,13 +407,16 @@ public abstract class Request {
 
             super.onPostExecute(result);
 
-            if (result == null) {
+            if (iResultCode == null) {
 
-                callback.onError(new Throwable(THROWABLE_LABEL+":解析结果为空"), false);
+                callback.onSuccess(t);
 
-                if(isShowServerMsg)
+            } else if (result == null) {
+
+                callback.onError(new Throwable(THROWABLE_LABEL + ":解析结果为空"), false);
+
+                if (isShowServerMsg)
                     Toast.makeText(context, "解析结果为空", Toast.LENGTH_SHORT).show();
-
 
 
             } else {
@@ -397,7 +429,7 @@ public abstract class Request {
 
                     String msg = iResultCode.resultCodeMap.get(result.code);
 
-                    if (!TextUtils.isEmpty(msg)){
+                    if (!TextUtils.isEmpty(msg)) {
 
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
@@ -405,15 +437,15 @@ public abstract class Request {
 
                 } else {
 
-                    callback.onError(new Throwable(THROWABLE_LABEL+":"+result.code+"-"+result.msg), false);
+                    callback.onError(new Throwable(THROWABLE_LABEL + ":" + result.code + "-" + result.msg), false);
 
                     String msg = iResultCode.resultCodeMap.get(result.code);
 
-                    if (!TextUtils.isEmpty(msg)){
+                    if (!TextUtils.isEmpty(msg)) {
 
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
-                    }else if (isShowServerMsg)
+                    } else if (isShowServerMsg)
                         Toast.makeText(context, result.msg, Toast.LENGTH_SHORT).show();
 
                 }
@@ -429,16 +461,19 @@ public abstract class Request {
 
     private void showLoadingDialog() {
 
-        if (requestCount == 0 && context instanceof Activity && !((Activity) context).isFinishing()) {
-            mDialog = ProgressDialog.show(context, "", "加载中...");
+        if (iLoadingDialog != null && requestCount == 0 && context instanceof Activity && !((Activity) context).isFinishing()) {
+            //mDialog = ProgressDialog.show(context, "", "加载中...");
+            mDialog = iLoadingDialog.showLoadingDialog((Activity) context);
         }
 
     }
 
     private void dismissLoadingDialog() {
 
-        if (requestCount == 0 && mDialog != null && mDialog.isShowing())
+        if (iLoadingDialog != null && requestCount == 0 && mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
+            iLoadingDialog.dismissLoadingDialog();
+        }
     }
 
 

@@ -3,6 +3,7 @@ package com.deanlib.ootb.utils;
 import android.app.Application;
 import android.content.Context;
 
+import com.deanlib.ootb.data.io.ILoadingDialog;
 import com.deanlib.ootb.data.io.IRequestParam;
 import com.deanlib.ootb.data.io.IResultCode;
 import com.deanlib.ootb.data.io.Request;
@@ -65,13 +66,15 @@ public class UtilsConfig {
      * @param param
      * @param code
      */
-    public static void setRequestServer(String requestServer, IRequestParam param, IResultCode code){
+    public static void setRequestServer(String requestServer, IRequestParam param, IResultCode code, ILoadingDialog dialog){
 
         Request.SERVER = requestServer;
 
         Request.iRequestParam = param;
 
         Request.iResultCode = code;
+
+        Request.iLoadingDialog = dialog;
 
     }
 }
