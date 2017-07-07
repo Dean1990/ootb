@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSON;
-import com.deanlib.ootb.utils.UtilsConfig;
+import com.deanlib.ootb.OotbConfig;
 
 /**
  * SharedPreferences再包装
@@ -23,7 +23,7 @@ public class PersistenceUtils {
 
         if (preferences == null) {
 
-            preferences = UtilsConfig.mContext.getSharedPreferences("AppData", Context.MODE_PRIVATE);
+            preferences = OotbConfig.mContext.getSharedPreferences("AppData", Context.MODE_PRIVATE);
 
             editor = preferences.edit();
             ;

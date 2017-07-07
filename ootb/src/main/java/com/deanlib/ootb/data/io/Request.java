@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.deanlib.ootb.utils.DLogUtils;
-import com.deanlib.ootb.utils.UtilsConfig;
+import com.deanlib.ootb.OotbConfig;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.KeyValue;
@@ -33,7 +33,7 @@ public abstract class Request {
     /**
      * 服务器地址
      */
-    public static String SERVER = UtilsConfig.getRequestServer();
+    public static String SERVER = OotbConfig.getRequestServer();
 
     public static final long EXPIRE_SECOND = 1000;
     public static final long EXPIRE_SECOND_10 = 1000 * 10;

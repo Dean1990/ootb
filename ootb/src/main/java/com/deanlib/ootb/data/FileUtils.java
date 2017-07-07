@@ -14,7 +14,7 @@ import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.deanlib.ootb.utils.FormatUtils;
-import com.deanlib.ootb.utils.UtilsConfig;
+import com.deanlib.ootb.OotbConfig;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +49,7 @@ public class FileUtils {
     public static String getAssetText(String assetFielPath){
         InputStream is = null;
         try {
-            is = UtilsConfig.mContext.getResources().getAssets().open(assetFielPath);
+            is = OotbConfig.mContext.getResources().getAssets().open(assetFielPath);
             String textfile = convertStreamToString(is);
             return textfile;
         } catch (IOException e) {
@@ -88,9 +88,9 @@ public class FileUtils {
      * @throws Exception
      */
     public static String getCacheTotalSize() throws Exception {
-        long cacheSize = getFolderSize(UtilsConfig.mContext.getCacheDir());
+        long cacheSize = getFolderSize(OotbConfig.mContext.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            cacheSize += getFolderSize(UtilsConfig.mContext.getExternalCacheDir());
+            cacheSize += getFolderSize(OotbConfig.mContext.getExternalCacheDir());
         }
         return FormatUtils.getFormatSize(cacheSize);
     }
@@ -100,9 +100,9 @@ public class FileUtils {
      * 删除所有缓存
      */
     public static void deleteCacheAll() {
-        deleteDir(UtilsConfig.mContext.getCacheDir());
+        deleteDir(OotbConfig.mContext.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            deleteDir(UtilsConfig.mContext.getExternalCacheDir());
+            deleteDir(OotbConfig.mContext.getExternalCacheDir());
         }
     }
 
@@ -274,7 +274,7 @@ public class FileUtils {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(UtilsConfig.mContext, uri)) {
+        if (isKitKat && DocumentsContract.isDocumentUri(OotbConfig.mContext, uri)) {
             // LocalStorageProvider
 //            if (isLocalStorageDocument(uri)) {
 //                // The path is the id
@@ -525,10 +525,10 @@ public class FileUtils {
         };
 
         try {
-            cursor = UtilsConfig.mContext.getContentResolver().query(uri, projection, selection, selectionArgs,
+            cursor = OotbConfig.mContext.getContentResolver().query(uri, projection, selection, selectionArgs,
                     null);
             if (cursor != null && cursor.moveToFirst()) {
-                if (UtilsConfig.isDEBUG())
+                if (OotbConfig.isDEBUG())
                     DatabaseUtils.dumpCursor(cursor);
 
                 final int column_index = cursor.getColumnIndexOrThrow(column);

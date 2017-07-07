@@ -1,4 +1,4 @@
-package com.deanlib.ootb.utils;
+package com.deanlib.ootb;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,6 +7,7 @@ import com.deanlib.ootb.data.io.ILoadingDialog;
 import com.deanlib.ootb.data.io.IRequestParam;
 import com.deanlib.ootb.data.io.IResultCode;
 import com.deanlib.ootb.data.io.Request;
+import com.deanlib.ootb.utils.DLogUtils;
 
 import org.xutils.x;
 
@@ -18,7 +19,7 @@ import org.xutils.x;
  * Created by dean on 2017/4/24.
  */
 
-public class UtilsConfig {
+public class OotbConfig {
 
 
     private static boolean DEBUG = false;

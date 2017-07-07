@@ -3,6 +3,8 @@ package com.deanlib.ootb.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.deanlib.ootb.OotbConfig;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class DLogUtils {
 
 	private DLogUtils() {
 
-		this.isDebug = UtilsConfig.isDEBUG();
+		this.isDebug = OotbConfig.isDEBUG();
 
 	}
 

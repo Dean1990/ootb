@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 
-import com.deanlib.ootb.utils.UtilsConfig;
+import com.deanlib.ootb.OotbConfig;
 
 import org.xutils.common.util.LogUtil;
 
@@ -180,7 +180,7 @@ public class ImageUtils {
         opt.inPurgeable = true;
         opt.inInputShareable = true;
         // 获取资源图片
-        InputStream is = UtilsConfig.mContext.getResources().openRawResource(resId);
+        InputStream is = OotbConfig.mContext.getResources().openRawResource(resId);
         return BitmapFactory.decodeStream(is, null, opt);
     }
 
@@ -193,7 +193,7 @@ public class ImageUtils {
      */
     public static Uri getImageContentUri(File imageFile) {
         String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = UtilsConfig.mContext.getContentResolver().query(
+        Cursor cursor = OotbConfig.mContext.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[] { MediaStore.Images.Media._ID },
                 MediaStore.Images.Media.DATA + "=? ",
@@ -208,7 +208,7 @@ public class ImageUtils {
             if (imageFile.exists()) {
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Images.Media.DATA, filePath);
-                return UtilsConfig.mContext.getContentResolver().insert(
+                return OotbConfig.mContext.getContentResolver().insert(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             } else {
                 return null;

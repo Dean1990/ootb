@@ -4,6 +4,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
+import com.deanlib.ootb.OotbConfig;
+
 /**
  * 版本相关
  *
@@ -21,8 +23,8 @@ public class VersionUtils {
         String versionName = "";
 
         try {
-            PackageManager packageManager = UtilsConfig.mContext.getPackageManager();
-            PackageInfo packageInfo = packageManager.getPackageInfo(UtilsConfig.mContext.getPackageName(), 0);
+            PackageManager packageManager = OotbConfig.mContext.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(OotbConfig.mContext.getPackageName(), 0);
             versionName = packageInfo.versionName;
             if (TextUtils.isEmpty(versionName)) {
                 return "";
@@ -41,8 +43,8 @@ public class VersionUtils {
         int versionCode = 0;
 
         try {
-            PackageManager packageManager = UtilsConfig.mContext.getPackageManager();
-            PackageInfo packageInfo = packageManager.getPackageInfo(UtilsConfig.mContext.getPackageName(), 0);
+            PackageManager packageManager = OotbConfig.mContext.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(OotbConfig.mContext.getPackageName(), 0);
             versionCode = packageInfo.versionCode;
 
         } catch (PackageManager.NameNotFoundException e) {

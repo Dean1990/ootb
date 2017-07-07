@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.deanlib.ootb.R;
+import com.deanlib.ootb.OotbConfig;
 
 import java.util.Locale;
 
@@ -34,7 +35,7 @@ public class DeviceUtils {
      */
     public static int getSreenWidth(){
 
-        WindowManager wm = (WindowManager) UtilsConfig.mContext.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) OotbConfig.mContext.getSystemService(Context.WINDOW_SERVICE);
 
         Display defaultDisplay = wm.getDefaultDisplay();
 
@@ -48,7 +49,7 @@ public class DeviceUtils {
      */
     public static int getSreenHight(){
 
-        WindowManager wm = (WindowManager) UtilsConfig.mContext.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) OotbConfig.mContext.getSystemService(Context.WINDOW_SERVICE);
 
         Display defaultDisplay = wm.getDefaultDisplay();
 
@@ -61,7 +62,7 @@ public class DeviceUtils {
      */
     public static void toggleKeyboard(){
 
-        InputMethodManager imm = (InputMethodManager) UtilsConfig.mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) OotbConfig.mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
@@ -86,7 +87,7 @@ public class DeviceUtils {
      */
     public static void showKeyboard(View view){
 
-        InputMethodManager imm = (InputMethodManager) UtilsConfig.mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) OotbConfig.mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
 
@@ -131,7 +132,7 @@ public class DeviceUtils {
      * @return
      */
     public static String getLocalMacAddress() {
-        WifiManager wifi = (WifiManager) UtilsConfig.mContext.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifi = (WifiManager) OotbConfig.mContext.getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = wifi.getConnectionInfo();
         return info.getMacAddress();
     }
@@ -141,7 +142,7 @@ public class DeviceUtils {
      * @return
      */
     public static boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) UtilsConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) OotbConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
     }
@@ -157,7 +158,7 @@ public class DeviceUtils {
      */
     public static int getNetworkType() {
         int netType = TYPE_NO_CONNECTION;
-        ConnectivityManager connectivityManager = (ConnectivityManager) UtilsConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) OotbConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null) {
             return netType;

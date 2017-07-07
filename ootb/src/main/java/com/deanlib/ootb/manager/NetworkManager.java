@@ -12,7 +12,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
 import com.deanlib.ootb.utils.DeviceUtils;
-import com.deanlib.ootb.utils.UtilsConfig;
+import com.deanlib.ootb.OotbConfig;
 
 import org.xutils.common.util.LogUtil;
 
@@ -76,11 +76,11 @@ public class NetworkManager {
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 		filter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
-		UtilsConfig.mContext.registerReceiver(ncr, filter);
+		OotbConfig.mContext.registerReceiver(ncr, filter);
 	}
 	
 	public void unregisterNetworkReceiver(){
-		UtilsConfig.mContext.unregisterReceiver(ncr);
+		OotbConfig.mContext.unregisterReceiver(ncr);
 	}
 	
 	
@@ -114,7 +114,7 @@ public class NetworkManager {
 
 		public void wapAction(Intent intent, String action) {
 			if(action.equals(ConnectivityManager.CONNECTIVITY_ACTION)){
-			    ConnectivityManager cm = (ConnectivityManager) UtilsConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+			    ConnectivityManager cm = (ConnectivityManager) OotbConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 			    NetworkInfo info = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 			    //如果是在开启wifi连接和有网络状态下
 			    if(NetworkInfo.State.CONNECTED==info.getState()){

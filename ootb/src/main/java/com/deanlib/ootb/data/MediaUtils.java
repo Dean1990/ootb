@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 
 
-import com.deanlib.ootb.utils.UtilsConfig;
+import com.deanlib.ootb.OotbConfig;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -205,7 +205,7 @@ public class MediaUtils {
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Uri getImageUri(Intent intent) {
-        ContentResolver cr = UtilsConfig.mContext.getContentResolver();
+        ContentResolver cr = OotbConfig.mContext.getContentResolver();
         Uri uri = intent.getData();
 //            String type = intent.getType();
         if (uri.getScheme().equals("file") && getMediaType(FileUtils.getPath(uri))==TYPE_IMAGE) {
