@@ -1,5 +1,9 @@
 package com.deanlib.ootb.utils;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -134,6 +138,23 @@ public class TextUtils {
             i = i + 6;
         }
         return sb.toString();
+    }
+
+    public static SpannableString getKeywordsSpannable(String text, String keywords,int color) {
+
+
+        SpannableString ss = new SpannableString(text);
+
+        try {
+
+            int index0 = text.indexOf(keywords);
+
+            int index1 = index0 + keywords.length();
+
+            ss.setSpan(new ForegroundColorSpan(color), index0, index1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        } catch (Exception e) {
+        }
+        return ss;
     }
 
 }

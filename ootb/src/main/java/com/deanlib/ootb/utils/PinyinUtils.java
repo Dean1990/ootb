@@ -3,7 +3,7 @@ package com.deanlib.ootb.utils;
 /**
  * 拼音帮助类
  */
-public class PinyinUtil {
+public class PinyinUtils {
 
     /**
      * 获得拼音
@@ -12,7 +12,7 @@ public class PinyinUtil {
      * @return
      */
     public static String getPinYin(String input) {
-        return PinyinUtil.getInstance().convertAll(input);
+        return PinyinUtils.getInstance().convertAll(input);
     }
 
     private static int[] pyvalue = new int[]{-20319, -20317, -20304, -20295,
@@ -112,9 +112,9 @@ public class PinyinUtil {
             "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"};
     private StringBuilder buffer;
     private String resource;
-    private static PinyinUtil chineseSpelling = new PinyinUtil();
+    private static PinyinUtils chineseSpelling = new PinyinUtils();
 
-    public static PinyinUtil getInstance() {
+    public static PinyinUtils getInstance() {
         return chineseSpelling;
     }
 
