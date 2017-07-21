@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--add package-->
+    <string name="scan_code">Scan code</string>
+    <string name="tint_package_name">Name(Optional)</string>
+    <string name="tint_package_number">Number</string>
+    <string name="wrong_number_and_check">Invalid number, check it and retry.</string>
+    <string name="require_permission">To support barcode scan, you need to grant camera permission.</string>
+    <string name="package_name_default_pre">Package</string>
+    <string name="package_exist">The package is in your list.</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="error">Error</string>
+    <string name="something_wrong">Something wrong…</string>
+    <string name="unable_to_open_camera">Unable to open camera, please check it and try again later.</string>
+    <!--add package end-->
+</resources>
