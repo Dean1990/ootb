@@ -78,4 +78,17 @@ public class OotbConfig {
         Request.iLoadingDialog = dialog;
 
     }
+
+    /**
+     * 设置网络请求的假数据开关
+     * 在实现request的parse方法中设置假数据，默认json = {}
+     * 做为测试时使用，开启后，不会请求网络而直接调用parse方法，并回调RequstCallback的onSuccess和onFinish方法。
+     *
+     * @param falseData
+     */
+    public static void setRequestFalseData(boolean falseData){
+
+        Request.FALSEDATA = falseData;
+
+    }
 }

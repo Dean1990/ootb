@@ -33,7 +33,8 @@ public abstract class Request {
     /**
      * 服务器地址
      */
-    public static String SERVER = OotbConfig.getRequestServer();
+    public static String SERVER = "";
+    public static boolean FALSEDATA = false;
 
     public static final long EXPIRE_SECOND = 1000;
     public static final long EXPIRE_SECOND_10 = 1000 * 10;
@@ -224,73 +225,78 @@ public abstract class Request {
         RequestParams params = iRequestParam != null ? iRequestParam.disposeParam(params()) : params();
 
 
-//        if(needSign){
-//
-//
-//
-//        }
+        Callback.Cancelable cancelable = null;
 
-        Callback.Cancelable cancelable = x.http().post(params, new Callback.CacheCallback<String>() {
+        if (!FALSEDATA) {
 
-            @Override
-            public void onSuccess(String result) {
+            cancelable = x.http().post(params, new Callback.CacheCallback<String>() {
 
-                if (result != null) {
+                @Override
+                public void onSuccess(String result) {
 
-                    DLogUtils.d(getName() + ": 网络请求任务成功");
+                    if (result != null) {
 
-                    DLogUtils.d(getName() + ": " + result);
+                        DLogUtils.d(getName() + ": 网络请求任务成功");
 
-                    new ParseTask<T>(result, callback).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        DLogUtils.d(getName() + ": " + result);
 
-                }
-            }
+                        new ParseTask<T>(result, callback).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-                DLogUtils.d(getName() + ": 网络请求任务失败");
-
-                ex.printStackTrace();
-
-                callback.onError(ex, isOnCallback);
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-                DLogUtils.d(getName() + ": 网络请求任务被取消");
-
-                callback.onCancelled(cex);
-
-            }
-
-            @Override
-            public void onFinished() {
-
-                DLogUtils.d(getName() + ": 网络请求任务完成");
-
-                callback.onFinished();
-
-                requestCount--;
-
-                dismissLoadingDialog();
-            }
-
-            @Override
-            public boolean onCache(String result) {
-
-                if (isCache) {
-
-                    DLogUtils.d(getName() + ": 使用缓存数据");
-
-                    new ParseTask<T>(result, callback).execute();
+                    }
                 }
 
-                return isCache;
-            }
-        });
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                    DLogUtils.d(getName() + ": 网络请求任务失败");
+
+                    ex.printStackTrace();
+
+                    callback.onError(ex, isOnCallback);
+
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                    DLogUtils.d(getName() + ": 网络请求任务被取消");
+
+                    callback.onCancelled(cex);
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                    DLogUtils.d(getName() + ": 网络请求任务完成");
+
+                    callback.onFinished();
+
+                    requestCount--;
+
+                    dismissLoadingDialog();
+                }
+
+                @Override
+                public boolean onCache(String result) {
+
+                    if (isCache) {
+
+                        DLogUtils.d(getName() + ": 使用缓存数据");
+
+                        new ParseTask<T>(result, callback).execute();
+                    }
+
+                    return isCache;
+                }
+            });
+
+        }else {
+
+            callback.onSuccess(parse("{}"));
+            callback.onFinished();
+
+        }
 
         return cancelable;
     }
