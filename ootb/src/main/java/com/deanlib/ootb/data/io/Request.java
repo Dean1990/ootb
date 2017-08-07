@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -34,7 +36,10 @@ public abstract class Request {
      * 服务器地址
      */
     public static String SERVER = "";
+    //假数据
     public static boolean FALSEDATA = false;
+    //假数据延时
+    public static long DELAYED = 0;
 
     public static final long EXPIRE_SECOND = 1000;
     public static final long EXPIRE_SECOND_10 = 1000 * 10;
@@ -292,12 +297,21 @@ public abstract class Request {
             });
 
         }else {
-            DLogUtils.d(getName() + ": 假数据测试");
-            callback.onSuccess(parse("{}"));
+            DLogUtils.d(getName() + ": 假数据测试,延时："+DELAYED+"毫秒");
 
-            callback.onFinished();
-            requestCount--;
-            dismissLoadingDialog();
+            x.task().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    callback.onSuccess(parse("{}"));
+
+                    callback.onFinished();
+                    requestCount--;
+                    dismissLoadingDialog();
+
+                }
+            },DELAYED);
+
 
         }
 

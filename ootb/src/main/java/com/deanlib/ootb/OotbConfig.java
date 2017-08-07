@@ -79,16 +79,29 @@ public class OotbConfig {
 
     }
 
+
     /**
-     * 设置网络请求的假数据开关
-     * 在实现request的parse方法中设置假数据，默认json = {}
-     * 做为测试时使用，开启后，不会请求网络而直接调用parse方法，并回调RequstCallback的onSuccess和onFinish方法。
-     *
+     * @see OotbConfig#setRequestFalseData(boolean, long)
      * @param falseData
      */
     public static void setRequestFalseData(boolean falseData){
 
+        setRequestFalseData(falseData,0);
+
+    }
+
+    /**
+     * 设置网络请求的假数据开关e
+     * 在实现request的parse方法中设置假数据，默认json = {}
+     * 做为测试时使用，开启后，不会请求网络而直接调用parse方法，并回调RequestCallback的onSuccess和onFinish方法。
+     *
+     * @param falseData
+     * @param delayed   延迟时间毫秒
+     */
+    public static void setRequestFalseData(boolean falseData,long delayed){
+
         Request.FALSEDATA = falseData;
+        Request.DELAYED = delayed<0?0:delayed;
 
     }
 }
