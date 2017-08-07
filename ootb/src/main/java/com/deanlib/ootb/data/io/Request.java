@@ -292,9 +292,12 @@ public abstract class Request {
             });
 
         }else {
-
+            DLogUtils.d(getName() + ": 假数据测试");
             callback.onSuccess(parse("{}"));
+
             callback.onFinished();
+            requestCount--;
+            dismissLoadingDialog();
 
         }
 
@@ -457,9 +460,9 @@ public abstract class Request {
                 }
             }
 
-            callback.onFinished();
-
-            dismissLoadingDialog();
+//            callback.onFinished();
+//
+//            dismissLoadingDialog();
 
         }
 
