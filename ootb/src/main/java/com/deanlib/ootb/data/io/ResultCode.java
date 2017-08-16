@@ -9,7 +9,7 @@ import java.util.HashMap;
  * Created by dean on 2017/6/15.
  */
 
-public abstract class IResultCode {
+public abstract class ResultCode {
 
     static String successCode;
 
@@ -20,27 +20,37 @@ public abstract class IResultCode {
      */
     static HashMap<String,String> resultCodeMap = new HashMap<>();
 
-    public IResultCode(String successCode){
+    public ResultCode(String successCode){
 
         this.successCode = successCode;
 
         resultCodeMap.put(successCode,"");
     }
 
-    public IResultCode(String successCode, String successMsg){
+    public ResultCode(String successCode, String successMsg){
 
         this.successCode = successCode;
 
         resultCodeMap.put(successCode,successMsg);
     }
 
-    public IResultCode(String successCode, HashMap<String,String> resultCodeMap){
+    public ResultCode(String successCode, HashMap<String,String> resultCodeMap){
 
         this.successCode = successCode;
 
         resultCodeMap.put(successCode,resultCodeMap.get(successCode));
 
         this.resultCodeMap.putAll(resultCodeMap);
+    }
+
+    /**
+     * 请求结果分析
+     *
+     * @param code
+     * @return 返回true，表示分析由用户自己完成，返回false，表示分析由用户和request一起完成
+     */
+    public boolean onResultParse(String code){
+        return false;
     }
 
 }

@@ -8,7 +8,7 @@ package com.deanlib.ootb.data.io;
  * Created by dean on 2017/6/15.
  */
 
-public class DefaultResultCode extends IResultCode {
+public class DefaultResultCode extends ResultCode {
 
     public DefaultResultCode() {
         super(successCode);

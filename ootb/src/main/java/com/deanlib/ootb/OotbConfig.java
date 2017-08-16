@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.deanlib.ootb.data.io.ILoadingDialog;
 import com.deanlib.ootb.data.io.IRequestParam;
-import com.deanlib.ootb.data.io.IResultCode;
+import com.deanlib.ootb.data.io.ResultCode;
 import com.deanlib.ootb.data.io.Request;
 import com.deanlib.ootb.utils.DLogUtils;
 
@@ -67,13 +67,13 @@ public class OotbConfig {
      * @param param
      * @param code
      */
-    public static void setRequestServer(String requestServer, IRequestParam param, IResultCode code, ILoadingDialog dialog){
+    public static void setRequestServer(String requestServer, IRequestParam param, ResultCode code, ILoadingDialog dialog){
 
         Request.SERVER = requestServer;
 
         Request.iRequestParam = param;
 
-        Request.iResultCode = code;
+        Request.resultCode = code;
 
         Request.iLoadingDialog = dialog;
 

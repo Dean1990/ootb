@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.deanlib.ootb.utils.DLogUtils;
-import com.deanlib.ootb.OotbConfig;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.KeyValue;
@@ -188,7 +185,7 @@ public abstract class Request {
 //    }
 
     public static IRequestParam iRequestParam;
-    public static IResultCode iResultCode;
+    public static ResultCode resultCode;
     public static ILoadingDialog iLoadingDialog;
 
 
@@ -219,12 +216,17 @@ public abstract class Request {
         requestCount++;
 
         if (true) {
+            for (int i = 0;params().getHeaders()!=null && i<params().getHeaders().size();i++){
+                DLogUtils.d("Header >>> "+params().getHeaders().get(i).key + " : " + params().getHeaders().get(i).getValueStr());
+            }
             for (KeyValue kv : params().getQueryStringParams()) {
-                DLogUtils.d(kv.key + " >>> " + kv.getValueStr());
+                DLogUtils.d("QueryStringParam >>> "+kv.key + " : " + kv.getValueStr());
             }
             for (KeyValue kv : params().getBodyParams()) {
-                DLogUtils.d(kv.key + " >>> " + kv.getValueStr());
+                DLogUtils.d("BodyParam >>> "+kv.key + " : " + kv.getValueStr());
             }
+
+            DLogUtils.d("BodyContent >>> "+params().getBodyContent());
         }
 
         RequestParams params = iRequestParam != null ? iRequestParam.disposeParam(params()) : params();
@@ -384,7 +386,7 @@ public abstract class Request {
 
         @Override
         protected Result doInBackground(Void... params) {
-            if (iResultCode != null) {
+            if (resultCode != null) {
 
                 if (callback == null) {
 
@@ -404,10 +406,13 @@ public abstract class Request {
 
                     if (mResult != null)
 
-                        if (iResultCode.successCode.equals(mResult.code)) {
+                        if (!resultCode.onResultParse(mResult.code)) {
 
-                            t = parse(json);
+                            if (resultCode.successCode.equals(mResult.code)) {
 
+                                t = parse(json);
+
+                            }
                         }
 
                 } catch (Exception e) {
@@ -430,7 +435,7 @@ public abstract class Request {
 
             super.onPostExecute(result);
 
-            if (iResultCode == null) {
+            if (resultCode == null) {
 
                 callback.onSuccess(t);
 
@@ -446,11 +451,11 @@ public abstract class Request {
 
                 DLogUtils.d(getName() + "  code:" + result.code + "  msg:" + result.msg);
 
-                if (iResultCode.successCode.equals(result.code)) {
+                if (resultCode.successCode.equals(result.code)) {
 
                     callback.onSuccess(t);
 
-                    String msg = iResultCode.resultCodeMap.get(result.code);
+                    String msg = resultCode.resultCodeMap.get(result.code);
 
                     if (!TextUtils.isEmpty(msg)) {
 
@@ -462,7 +467,7 @@ public abstract class Request {
 
                     callback.onError(new Throwable(THROWABLE_LABEL + ":" + result.code + "-" + result.msg), false);
 
-                    String msg = iResultCode.resultCodeMap.get(result.code);
+                    String msg = resultCode.resultCodeMap.get(result.code);
 
                     if (!TextUtils.isEmpty(msg)) {
 
