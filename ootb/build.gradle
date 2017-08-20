@@ -32,7 +32,7 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
     compile 'com.inkapplications.viewpageindicator:library:2.4.3'
-    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.google.zxing:core:3.2.1'
 }
 
 ////添加插件
