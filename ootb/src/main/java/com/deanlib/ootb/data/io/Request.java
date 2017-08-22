@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.deanlib.ootb.OotbConfig;
 import com.deanlib.ootb.utils.DLogUtils;
 
 import org.xutils.common.Callback;
@@ -361,7 +362,7 @@ public abstract class Request {
 //
 //            Result result = (Result) msg.obj;
 //
-//            Toast.makeText(context,result.msg,Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(),result.msg,Toast.LENGTH_SHORT).show();
 //
 //        }
 //    };
@@ -444,7 +445,7 @@ public abstract class Request {
                 callback.onError(new Throwable(THROWABLE_LABEL + ":解析结果为空"), false);
 
                 if (isShowServerMsg)
-                    Toast.makeText(context, "解析结果为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "解析结果为空", Toast.LENGTH_SHORT).show();
 
 
             } else {
@@ -459,7 +460,7 @@ public abstract class Request {
 
                     if (!TextUtils.isEmpty(msg)) {
 
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -471,10 +472,10 @@ public abstract class Request {
 
                     if (!TextUtils.isEmpty(msg)) {
 
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
 
                     } else if (isShowServerMsg)
-                        Toast.makeText(context, result.msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), result.msg, Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -487,11 +488,19 @@ public abstract class Request {
 
     }
 
+    private Context getContext(){
+
+        if(context == null)
+            context = OotbConfig.mContext;
+
+        return context;
+    }
+
     private void showLoadingDialog() {
 
-        if (iLoadingDialog != null && requestCount == 0 && context instanceof Activity && !((Activity) context).isFinishing()) {
-            //mDialog = ProgressDialog.show(context, "", "加载中...");
-            mDialog = iLoadingDialog.showLoadingDialog((Activity) context);
+        if (iLoadingDialog != null && requestCount == 0 && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()) {
+            //mDialog = ProgressDialog.show(getContext(), "", "加载中...");
+            mDialog = iLoadingDialog.showLoadingDialog((Activity) getContext());
         }
 
     }
