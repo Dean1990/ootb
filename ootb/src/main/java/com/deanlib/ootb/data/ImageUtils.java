@@ -2,6 +2,7 @@ package com.deanlib.ootb.data;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -214,5 +215,28 @@ public class ImageUtils {
                 return null;
             }
         }
+    }
+
+    /*
+ * 剪切图片
+ */
+    private void crop(Activity activity,Uri uri,int requestCode) {
+        // 裁剪图片意图
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        // 裁剪框的比例，1：1
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // 裁剪后输出图片的尺寸大小
+        intent.putExtra("outputX", 144);
+        intent.putExtra("outputY", 144);
+
+        intent.putExtra("outputFormat", "JPEG");// 图片格式
+        intent.putExtra("noFaceDetection", true);// 取消人脸识别
+        intent.putExtra("return-data", true);
+
+        // 开启一个带有返回值的Activity，请求码为REQUEST_CODE_CROP
+        activity.startActivityForResult(intent, requestCode);
     }
 }
