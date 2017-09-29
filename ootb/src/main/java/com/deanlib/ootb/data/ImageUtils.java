@@ -109,8 +109,8 @@ public class ImageUtils {
      * @param fileUri
      * @return
      */
-    public static File scal(Uri fileUri) {
-        String path = fileUri.getPath();
+    public static File scal(Activity activity,Uri fileUri) {
+        String path = getImageUriToFile(activity,fileUri);
         File outputFile = new File(path);
         return scal(outputFile);
     }
