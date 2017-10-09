@@ -58,7 +58,7 @@ public class ValidateUtils {
     }
 
     /**
-     * 验证是否是完整的网页
+     * 验证是否是完整的网址
      *
      * @param url
      * @return
@@ -71,6 +71,48 @@ public class ValidateUtils {
 
         return m.matches();
 
+    }
+
+    /**
+     * 验证是否是整数
+     * 包括正整数，负整数和0
+     * @param num
+     * @return
+     */
+    public static boolean isInteger(String num){
+
+        return Pattern.matches("[+-]?\\d+",num);
+
+    }
+
+    /**
+     * 验证是否是小数
+     * @param num
+     * @return
+     */
+    public static boolean isDecimals(String num){
+
+        return Pattern.matches("(([+-]?\\d+)|(\\d*))\\.\\d+",num);
+    }
+
+    /**
+     * 验证是否是身份证
+     * @param num
+     * @return
+     */
+    public static boolean isIDCard(String num){
+
+        return Pattern.matches("\\d{10}((0[1-9])|(1[0-2]))((0[1-9]|([1-2][0-9]))|(3[0-1]))\\d{3}[\\dXx]",num);
+    }
+
+    /**
+     * 验证是否是金钱金额
+     * @param num
+     * @return
+     */
+    public static boolean isMoney(String num){
+
+        return Pattern.matches("\\d+(\\.\\d{1,2})?",num);
     }
 
 

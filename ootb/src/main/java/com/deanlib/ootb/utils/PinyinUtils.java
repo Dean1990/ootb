@@ -1,5 +1,12 @@
 package com.deanlib.ootb.utils;
 
+import android.text.*;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+
 /**
  * 拼音帮助类
  */
@@ -217,6 +224,55 @@ public class PinyinUtils {
 
     public String getSpelling() {
         return this.getSelling(this.getResource());
+    }
+
+    /**
+     * 得到字符串拼音首字母拼接的字符串
+     * @param chinese
+     * @return
+     */
+    public static String getPinYinInitial(String chinese) {
+        //创建输出的格式化对象,决定输出的拼音格式，比如大小写，是否带有音标
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+
+        format.setCaseType(HanyuPinyinCaseType.UPPERCASE);//大写字母
+
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);//去掉声调
+        //如果字符串为空直接返回null
+        if (android.text.TextUtils.isEmpty(chinese)) return null;
+        //转化成char数组
+        char[] chars = chinese.toCharArray();
+        //字符串builder
+        StringBuilder builder = new StringBuilder();
+        //遍历字符串
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            String s =""+c;
+            //判断是不是空格
+            if (Character.isWhitespace(c)) {
+                continue;//跳过本次循环
+                //小于127肯定不是汉字
+            } else if (c>127) {
+                try {
+                    //转化成拼音 因为多音字所以返回数组
+                    String[] pinyin = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                    //取拼音首位拼接
+                    builder.append(pinyin[0]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                //直接拼接
+                if(c>=97&&c<=122) {
+                    builder.append(s.toUpperCase());
+                }else {
+                    builder.append(s.toUpperCase());
+                }
+            }
+        }
+
+        //返回拼接好的字符串
+        return builder.toString();
     }
 
 }
