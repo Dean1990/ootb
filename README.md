@@ -42,7 +42,7 @@
 
 	OotbConfig.setRequestFalseData(false, 1000);
 	
-######然后修改网络请求的request实现类的parse方法的参数值
+###### 然后修改网络请求的request实现类的parse方法的参数值
 
 	@Override
     public Object parse(String s) {
@@ -56,10 +56,72 @@
     
 ##### 5. 定义网络请求参数
 
+	public class UserReqParam implements IRequestParam {
+
+	    @Override
+	    public RequestParams disposeParam(RequestParams requestParams) {
+	    
+	        //可以在这个方法里设置一些全局网络请求参数
+	        if (requestParams!=null){
+	            if (UserManager.isUserLogin()){
+	                DLogUtils.d("User Header>>>token:"+UserManager.user.token);
+	                requestParams.addHeader("token",UserManager.user.token);
+	                requestParams.setReadTimeout(30000);
+	            }
+	
+	        }
+	
+	        return requestParams;
+	    }
+	}
+
 ##### 6. 定义网络请求返回值
 
+	public class UserResultCode extends ResultCode {
+
+	    public UserResultCode(String successCode,HashMap<String, String> resultCodeMap) {
+	        super(successCode,resultCodeMap);
+	    }
+	
+	    @Override
+	    public boolean onResultParse(String code) {
+	        //可以在这里设置一些全局的网络请求结果的相应操作
+	        //例如接口规定 code返回123时登录过期,即可如下操作
+	        if ("123".equals(code)){
+	
+	            UserManager.deleteUser();
+	
+	        }
+	
+	        return super.onResultParse(code);
+	    }
+	}
+
 ##### 7. 定义网络请求加载框
-        
+
+	public class UserLoadingDialog extends ILoadingDialog {
+	
+		@Override
+            public Dialog showLoadingDialog(Activity activity) {
+            
+                //自定义加载框
+                View view = LayoutInflater.from(activity).inflate(R.layout.layout_loading, null);
+                ImageView imgLoading = view.findViewById(R.id.imgLoading);
+                
+                Animation animation = AnimationUtils.loadAnimation(activity, R.anim.round_rotate);
+                animation.setInterpolator(new LinearInterpolator());
+                imgLoading.setImageResource(R.mipmap.loading);
+                imgLoading.startAnimation(animation);
+
+                return new AlertDialog.Builder(activity, R.style.TransparentBGDialog).setCancelable(false).setView(view).show();
+            }
+
+            @Override
+            public void dismissLoadingDialog() {
+					//网络请求结束，关闭加载框时会调用该方法
+            }
+	
+	}
         
 
 #### 文件目录
