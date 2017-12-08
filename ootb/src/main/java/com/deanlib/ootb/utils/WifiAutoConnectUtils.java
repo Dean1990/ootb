@@ -1,23 +1,20 @@
-package com.deanlib.ootb.manager;
+package com.deanlib.ootb.utils;
 
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.List;
 
 /**
  * 自动连接指定WIFI
- * @see WifiAutoConnectManager#connect(String, String, WifiCipherType)
+ * @see WifiAutoConnectUtils#connect(String, String, WifiCipherType)
  * <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
  *
  * Created by dean on 2017/8/29.
  */
 
-public class WifiAutoConnectManager {
-
-    private static final String TAG = WifiAutoConnectManager.class.getSimpleName();
+public class WifiAutoConnectUtils {
 
     WifiManager wifiManager;
 
@@ -27,7 +24,7 @@ public class WifiAutoConnectManager {
     }
 
     // 构造函数
-    public WifiAutoConnectManager(WifiManager wifiManager) {
+    public WifiAutoConnectUtils(WifiManager wifiManager) {
         this.wifiManager = wifiManager;
     }
 
@@ -132,7 +129,7 @@ public class WifiAutoConnectManager {
             WifiConfiguration wifiConfig = createWifiInfo(ssid, password, type);
             //
             if (wifiConfig == null) {
-                Log.d(TAG, "wifiConfig is null!");
+                DLogUtils.d("wifiConfig is null!");
                 return;
             }
 
@@ -144,9 +141,9 @@ public class WifiAutoConnectManager {
 
             int netID = wifiManager.addNetwork(wifiConfig);
             boolean enabled = wifiManager.enableNetwork(netID, true);
-            Log.d(TAG, "enableNetwork status enable=" + enabled);
+            DLogUtils.d("enableNetwork status enable=" + enabled);
             boolean connected = wifiManager.reconnect();
-            Log.d(TAG, "enableNetwork connected=" + connected);
+            DLogUtils.d("enableNetwork connected=" + connected);
         }
     }
 

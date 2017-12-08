@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.deanlib.ootb.widget;
+package com.deanlib.ootb.widget.loopviewpager;
 
 import android.os.Parcelable;
 import android.support.v4.app.FragmentPagerAdapter;
