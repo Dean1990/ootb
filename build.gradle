@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 3
+        versionName "2.0.0"
+
+
+    }
+
+}
+
+dependencies {
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:25.4.0'
+    compile 'org.xutils:xutils:3.5.0'
+    compile 'com.alibaba:fastjson:1.2.41'//json
+    compile 'com.github.bumptech.glide:glide:3.7.0'//图片加载
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+    compile 'com.inkapplications.viewpageindicator:library:2.4.3'
+//    compile 'com.google.zxing:core:3.2.1'//zxing扫码核心
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'//图表
+    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'//扫码包装
+    compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'//zbar扫码
+    compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'//zxing扫码
+    compile 'org.greenrobot:eventbus:3.0.0'//消息传递
+    compile 'q.rorbin:VerticalTabLayout:1.2.5'//竖向的TAB
+    compile 'com.zhy:flowlayout-lib:1.0.3'//流式布局
+    compile 'se.emilsjolander:stickylistheaders:2.7.0'//带标题悬停的listview
+    compile 'com.github.Dean1990:BothwayListview:-SNAPSHOT'//双向滑动的listview
+    compile 'com.belerweb:pinyin4j:2.5.1'//拼音相关
+
+}
+
+
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.Dean1990'
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError  false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
