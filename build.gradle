@@ -21,7 +21,7 @@ dependencies {
     })
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:appcompat-v7:25.4.0'
     compile 'org.xutils:xutils:3.5.0'
     compile 'com.alibaba:fastjson:1.2.41'//json
     compile 'com.github.bumptech.glide:glide:3.7.0'//图片加载
