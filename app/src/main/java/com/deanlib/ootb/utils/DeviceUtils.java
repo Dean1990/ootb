@@ -197,11 +197,12 @@ public class DeviceUtils {
 
     /**
      * 获取基本的设备及应用信息
-     * @param context
      * @return
      */
-    public static String getHandSetInfo(Context context){
-        String handSetInfo= String.format(context.getString(R.string.tag_handsetinfo),android.os.Build.MODEL, Build.VERSION.SDK_INT,android.os.Build.VERSION.RELEASE, VersionUtils.getAppVersionName(), VersionUtils.getAppVersionCode());
+    public static String getHandSetInfo(){
+        String handSetInfo= String.format(OotbConfig.mContext.getString(R.string.tag_handsetinfo)
+                ,android.os.Build.MODEL, Build.VERSION.SDK_INT,android.os.Build.VERSION.RELEASE
+                , VersionUtils.getAppVersionName(), VersionUtils.getAppVersionCode());
         return handSetInfo;
     }
 
