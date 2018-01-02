@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "27.0.0"
+    defaultConfig {
+//        applicationId "com.deanlib.ootb"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 3
+        versionName "2.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:25.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation ('com.android.support.test.espresso:espresso-core:3.0.1', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.xutils:xutils:3.5.0'
+    implementation 'com.alibaba:fastjson:1.2.41'//json
+    implementation 'com.github.bumptech.glide:glide:3.7.0'//图片加载
+    implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    implementation 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+    implementation 'com.inkapplications.viewpageindicator:library:2.4.3'
+//    implementation 'com.google.zxing:core:3.2.1'//zxing扫码核心
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'//图表
+    implementation 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'//扫码包装
+    implementation 'cn.bingoogolapple:bga-zbar:1.1.7@aar'//zbar扫码
+    implementation 'cn.bingoogolapple:bga-zxing:1.1.7@aar'//zxing扫码
+    implementation 'org.greenrobot:eventbus:3.0.0'//消息传递
+    implementation 'q.rorbin:VerticalTabLayout:1.2.5'//竖向的TAB
+    implementation 'com.zhy:flowlayout-lib:1.0.3'//流式布局
+    implementation 'se.emilsjolander:stickylistheaders:2.7.0'//带标题悬停的listview
+    implementation 'com.github.Dean1990:BothwayListview:1.0.3'//双向滑动的listview
+    implementation 'com.belerweb:pinyin4j:2.5.1'//拼音相关
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'//上下拉加载
+}
