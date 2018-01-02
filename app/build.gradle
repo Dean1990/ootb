@@ -47,3 +47,30 @@ dependencies {
     implementation 'com.belerweb:pinyin4j:2.5.1'//拼音相关
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'//上下拉加载
 }
+
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.Dean1990'
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError  false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
