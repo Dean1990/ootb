@@ -1,5 +1,7 @@
 package com.deanlib.ootb.utils;
 
+import android.text.*;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +20,10 @@ public class ValidateUtils {
      * @return
      */
     public static boolean isEmail(String email) {
+
+        if (android.text.TextUtils.isEmpty(email))
+            return false;
+
         String str = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(email);
@@ -32,6 +38,9 @@ public class ValidateUtils {
      * @return
      */
     public static boolean isMobileNum(String mobileNum) {
+
+        if (android.text.TextUtils.isEmpty(mobileNum))
+            return false;
 
         if (mobileNum.length() > 11) {
             return false;
@@ -65,6 +74,9 @@ public class ValidateUtils {
      */
     public static boolean isHttpURL(String url) {
 
+        if (android.text.TextUtils.isEmpty(url))
+            return false;
+
         String str = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(url);
@@ -81,6 +93,9 @@ public class ValidateUtils {
      */
     public static boolean isInteger(String num){
 
+        if (android.text.TextUtils.isEmpty(num))
+            return false;
+
         return Pattern.matches("[+-]?\\d+",num);
 
     }
@@ -92,6 +107,9 @@ public class ValidateUtils {
      */
     public static boolean isDecimals(String num){
 
+        if (android.text.TextUtils.isEmpty(num))
+            return false;
+
         return Pattern.matches("(([+-]?\\d+)|(\\d*))\\.\\d+",num);
     }
 
@@ -102,6 +120,9 @@ public class ValidateUtils {
      */
     public static boolean isIDCard(String num){
 
+        if (android.text.TextUtils.isEmpty(num))
+            return false;
+
         return Pattern.matches("\\d{10}((0[1-9])|(1[0-2]))((0[1-9]|([1-2][0-9]))|(3[0-1]))\\d{3}[\\dXx]",num);
     }
 
@@ -111,6 +132,9 @@ public class ValidateUtils {
      * @return
      */
     public static boolean isMoney(String num){
+
+        if (android.text.TextUtils.isEmpty(num))
+            return false;
 
         return Pattern.matches("\\d+(\\.\\d{1,2})?",num);
     }
