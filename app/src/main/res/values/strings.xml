@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">OOTB</string>
     <string name="tag_handsetinfo">手机型号:%1$s,SDK版本:%2$d,系统版本:%3$s,应用版本:%4$s,开发版本:%5$d</string>
 </resources>
