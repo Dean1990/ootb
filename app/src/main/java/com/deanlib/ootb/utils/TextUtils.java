@@ -203,4 +203,54 @@ public class TextUtils {
         return tmp.toString();
     }
 
+    /**
+     * 隐藏手机号中间部分
+     * @param num
+     * @return
+     */
+    public static String hidePhoneNum(String num){
+
+        if (ValidateUtils.isMobileNum(num)) {
+
+            return num.substring(0,3)+"****"+num.substring(num.length()-4);
+        }else return num;
+    }
+
+    /**
+     * //剔除HTML空格 和 空格
+     * @param s
+     * @return
+     */
+    public static String trim(String s){
+
+        int l = s.length();
+
+        int a = 0,b = 0;
+
+        boolean isA = false;
+        boolean isB = false;
+
+        char[] chars = s.toCharArray();
+
+        for (int i = 0;i<chars.length;i++){
+
+            if (!isA && chars[i]!=160 && chars[i]!=32){
+                a = i;
+                isA = true;
+            }
+
+            if (!isB && chars[chars.length - i -1]!=160 && chars[chars.length - i -1]!=32 ){
+                b = chars.length - i;
+                isB = true;
+            }
+
+            if (isA && isB){
+                break;
+            }
+
+        }
+
+        return s.substring(a,b);
+    }
+
 }
