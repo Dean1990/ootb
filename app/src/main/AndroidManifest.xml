@@ -1,8 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deanlib.ootb">
 
-    <application
-        android:allowBackup="true"
-        android:supportsRtl="true"
-        android:theme="@style/OotbAppTheme" />
+    <application />
 </manifest>
