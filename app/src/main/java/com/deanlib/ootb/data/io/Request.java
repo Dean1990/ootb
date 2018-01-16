@@ -17,6 +17,7 @@ import org.xutils.common.util.MD5;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -517,7 +518,6 @@ public abstract class Request {
      * <p>
      * Created by dean on 2017/4/19.
      */
-
     public interface RequestCallback<T> {
 
         /**
@@ -550,5 +550,107 @@ public abstract class Request {
 
     }
 
+    /**
+     * 定义全局请求参数
+     * <p>
+     * Created by dean on 2017/5/22.
+     */
+    public interface IRequestParam {
 
+        RequestParams disposeParam(RequestParams params);
+
+    }
+
+    /**
+     * 自定义加载框
+     * <p>
+     * Created by dean on 2017/7/8.
+     */
+    public interface ILoadingDialog {
+
+        /**
+         * 需要显示加载框时被调用
+         * 需要生成一个加载框，并返回给这个方法
+         *
+         * @param activity
+         * @return
+         */
+        Dialog showLoadingDialog(Activity activity);
+
+        /**
+         * 加载框关闭时被调用
+         */
+        void dismissLoadingDialog();
+    }
+
+    /**
+     * 返回结果参数的自定义类接口
+     * <p>
+     * <p>
+     * Created by dean on 2017/6/15.
+     */
+
+    public abstract class Result {
+
+        protected String successCode;
+
+        /**
+         * key:code,value:msg
+         * <p>
+         * msg的显示级别高于服务器信息，当msg不为空时，优先展示msg信息并屏蔽服务器的msg信息
+         */
+        protected HashMap<String, String> resultCodeMap = new HashMap<>();
+
+        public Result(String successCode) {
+
+            this.successCode = successCode;
+
+            resultCodeMap.put(successCode, "");
+        }
+
+        public Result(String successCode, String successMsg) {
+
+            this.successCode = successCode;
+
+            resultCodeMap.put(successCode, successMsg);
+        }
+
+        public Result(String successCode, HashMap<String, String> resultCodeMap) {
+
+            this.successCode = successCode;
+
+            resultCodeMap.put(successCode, resultCodeMap.get(successCode));
+
+            this.resultCodeMap.putAll(resultCodeMap);
+        }
+
+        /**
+         * 请求结果 自行分析处理
+         *
+         * @param code
+         * @return 返回true，表示分析由用户自己完成，返回false，表示分析由用户和request一起完成
+         */
+        public boolean onResultParse(String code) {
+            return false;
+        }
+
+        /**
+         * 指定ResultCode的值
+         * 数据请求的状态码
+         *
+         * @return
+         */
+        public abstract String getResultCode();
+
+        /**
+         * 指定ResultMsg的值
+         * 数据请求的服务器信息
+         *
+         * @return
+         */
+        public abstract String getResultMsg();
+//    public abstract T getResultData();
+
+
+    }
 }

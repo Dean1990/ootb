@@ -35,8 +35,8 @@ public void onCreate() {
     ...
     //放在使用OOTB的最前面
     OotbConfig.init(this,true);
-    //网络设置
-    OotbConfig.setRequestServer(Constants.serviceUrl, null, new DefaultResultCode(),new DefaultLoadingDialog());
+    //网络请求设置
+    OotbConfig.setRequestServer(Constants.serviceUrl, null, new UserResult(),new DefaultLoadingDialog());
     ...
 }
 ```
@@ -76,7 +76,7 @@ public Object parse(String s) {
 }
 ```
 
-##### 6. 定义网络请求参数
+##### 6. 定义全局的网络请求参数
 
 ```java
 public class UserReqParam implements IRequestParam {
@@ -101,21 +101,44 @@ public class UserReqParam implements IRequestParam {
 ##### 7. 定义网络请求返回值
 
 ```java
-public class UserResultCode extends ResultCode {
-  public UserResultCode(String successCode,HashMap<String, String> resultCodeMap) {
+public class UserResult extends Result {
+  //例如接口数据标准是这样的 {"code": "200","msg": "this is msg","data": {"xxx":"xxx",...}}
+  public String code;
+  public String msg;
+  
+  public UserResult() {
+    //指定请求成功的状态码
+    //例如接口规定是“200”，或者是“1”，或者是什么什么...(http协议无关)
+    super("200");
+  }
+  //多种构造函数可使用
+  public UserResult(String successCode,HashMap<String, String> resultCodeMap) {
     super(successCode,resultCodeMap);
   }
+  
+  @Override
+  public String getResultCode() {
+     return code;//指定数据请求的状态码
+  }
 
+  @Override
+  public String getResultMsg() {
+     return msg;//指定数据请求的服务器信息
+  }
+
+  /**
+  * 请求结果 自行分析处理
+  *
+  * @param code
+  * @return 返回true，表示分析由用户自己完成，返回false，表示分析由用户和request一起完成
+  */
   @Override
   public boolean onResultParse(String code) {
     //可以在这里设置一些全局的网络请求结果的相应操作
     //例如接口规定 code返回123时登录过期,即可如下操作
     if ("123".equals(code)){
-
       UserManager.deleteUser();
-
     }
-
     return super.onResultParse(code);
   }
 }
@@ -148,6 +171,76 @@ public class UserLoadingDialog extends ILoadingDialog {
 }
 ```
 
+##### 9.定义一个接口类
+
+```java
+public class TestReq extends Request {
+	int id;
+    public TestReq(Context context,int id) {
+        super(context);
+      	this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();//补充这个返回值内容，有益于日志的显示
+    }
+
+    @Override
+    public RequestParams params() {
+      	//接口地址和参数
+      	RequestParams params = new RequestParams(Request.SERVER+"/test.html");
+      	params.addBodyParameter("id",id+"");
+        return params;
+    }
+
+    @Override
+    public Entity parse(String json) {
+		//做近一步解析处理
+		//json = "{\"code\":\"12\",\"msg\":\"this is msg\",\"data\":{\"eid\":1112,\"name\":\"this is test\"}}";
+        Data data = JSON.parseObject(json,Data.class);
+      	if(data!=null)
+        	return data.result;
+      	return null;
+    }
+
+  	//定义具体的类继承自定义的Result,用于fastjson的解析
+    static class Data extends UserResult{
+        public Entity data;
+    }
+}
+```
+
+ ##### 10.使用接口类请求数据
+
+```java
+new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
+    @Override
+    public void onSuccess(Entity o) {
+        //请求成功执行
+        if(o!=null)
+      	   Toast.makeText(getApplicationContext(),
+                o.getEid()+":"+o.getName(),Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onError(Throwable ex, boolean isOnCallback) {
+        //请求失败执行
+        ex.printStackTrace();
+    }
+    @Override
+    public void onCancelled(Callback.CancelledException cex) {
+        //请求被取消执行，Request的execute是会返回Callback.Cancelable的句柄
+      	//如果需要取消，可以调用Callback.Cancelable.cancel()方法，在这个请求没有完成之前。
+	}
+	@Override
+    public void onFinished() {
+		//请求完成时执行(无论是成功或失败或者取消)
+    }
+});
+```
+
+
+
 #### 文件目录
 
 * data
@@ -155,12 +248,11 @@ public class UserLoadingDialog extends ILoadingDialog {
     * DB.java（数据库管理）
   * io
     * DefaultLoadingDialog.java（提供的默认加载框）
-    * DefaultResultCode.java（提供的默认返回值）
-    * ILoadingDialog.java（加载框自定义接口）
-    * IRequestParam.java（请求参数自定义接口）
     * Request.java（网络请求的抽象类）
-    * Request.RequestCallback.java（网络请求的回调）
-    * ResultCode.java（返回值自定义接口，耦合性太好，待改善）
+      * ILoadingDialog.java（加载框自定义接口）
+      * IRequestParam.java（请求参数自定义接口）
+      * RequestCallback.java（网络请求的回调）
+      * Result.java（返回参数自定义接口）
   * FileUtils.java（文件操作）
   * ImageUtils.java（图片操作）
   * MediaUtils.java（多媒体相关）

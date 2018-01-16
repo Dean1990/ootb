@@ -10,7 +10,7 @@ import android.app.ProgressDialog;
  * Created by dean on 2017/7/8.
  */
 
-public class DefaultLoadingDialog implements ILoadingDialog {
+public class DefaultLoadingDialog implements Request.ILoadingDialog {
     @Override
     public Dialog showLoadingDialog(Activity activity) {
         return ProgressDialog.show(activity, "", "加载中...");

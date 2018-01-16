@@ -2,10 +2,6 @@ package com.deanlib.ootb;
 
 import android.app.Application;
 import android.content.Context;
-
-import com.deanlib.ootb.data.io.ILoadingDialog;
-import com.deanlib.ootb.data.io.IRequestParam;
-import com.deanlib.ootb.data.io.Result;
 import com.deanlib.ootb.data.io.Request;
 import com.deanlib.ootb.utils.DLogUtils;
 
@@ -65,15 +61,15 @@ public class OotbConfig {
      * 使用Requst类时，必须先对其设置
      * @param requestServer
      * @param param
-     * @param resultMode
+     * @param result
      */
-    public static void setRequestServer(String requestServer, IRequestParam param, Result resultMode, ILoadingDialog dialog){
+    public static void setRequestServer(String requestServer, Request.IRequestParam param, Request.Result result, Request.ILoadingDialog dialog){
 
         Request.SERVER = requestServer;
 
         Request.iRequestParam = param;
 
-        Request.resultMode = resultMode;
+        Request.resultMode = result;
 
         Request.iLoadingDialog = dialog;
 
