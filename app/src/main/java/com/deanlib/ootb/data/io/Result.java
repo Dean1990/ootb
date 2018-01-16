@@ -53,8 +53,8 @@ public abstract class Result {
         return false;
     }
 
-    abstract String getResultCode();
-    abstract String getResultMsg();
+    public abstract String getResultCode();
+    public abstract String getResultMsg();
 //    abstract T getResultData();
 
 }
