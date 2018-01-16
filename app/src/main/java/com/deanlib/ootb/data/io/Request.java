@@ -148,10 +148,11 @@ public abstract class Request {
 
     /**
      * 设置加载框
+     *
      * @param iLoadingDialog
      * @return
      */
-    public Request setLoadingDialog(ILoadingDialog iLoadingDialog){
+    public Request setLoadingDialog(ILoadingDialog iLoadingDialog) {
 
         this.iLoadingDialog = iLoadingDialog;
 
@@ -186,7 +187,7 @@ public abstract class Request {
 //    }
 
     public static IRequestParam iRequestParam;
-    public static ResultCode resultCode;
+    public static Result resultMode;
     public static ILoadingDialog iLoadingDialog;
 
 
@@ -217,17 +218,17 @@ public abstract class Request {
         requestCount++;
 
         if (true) {
-            for (int i = 0;params().getHeaders()!=null && i<params().getHeaders().size();i++){
-                DLogUtils.d("Header >>> "+params().getHeaders().get(i).key + " : " + params().getHeaders().get(i).getValueStr());
+            for (int i = 0; params().getHeaders() != null && i < params().getHeaders().size(); i++) {
+                DLogUtils.d("Header >>> " + params().getHeaders().get(i).key + " : " + params().getHeaders().get(i).getValueStr());
             }
             for (KeyValue kv : params().getQueryStringParams()) {
-                DLogUtils.d("QueryStringParam >>> "+kv.key + " : " + kv.getValueStr());
+                DLogUtils.d("QueryStringParam >>> " + kv.key + " : " + kv.getValueStr());
             }
             for (KeyValue kv : params().getBodyParams()) {
-                DLogUtils.d("BodyParam >>> "+kv.key + " : " + kv.getValueStr());
+                DLogUtils.d("BodyParam >>> " + kv.key + " : " + kv.getValueStr());
             }
 
-            DLogUtils.d("BodyContent >>> "+params().getBodyContent());
+            DLogUtils.d("BodyContent >>> " + params().getBodyContent());
         }
 
         RequestParams params = iRequestParam != null ? iRequestParam.disposeParam(params()) : params();
@@ -299,8 +300,8 @@ public abstract class Request {
                 }
             });
 
-        }else {
-            DLogUtils.d(getName() + ": 假数据测试,延时："+DELAYED+"毫秒");
+        } else {
+            DLogUtils.d(getName() + ": 假数据测试,延时：" + DELAYED + "毫秒");
 
             x.task().postDelayed(new Runnable() {
                 @Override
@@ -313,7 +314,7 @@ public abstract class Request {
                     dismissLoadingDialog();
 
                 }
-            },DELAYED);
+            }, DELAYED);
 
 
         }
@@ -346,14 +347,14 @@ public abstract class Request {
         return MD5.md5(str.toString());
     }
 
-    public static class Result {
-
-        public String code;
-
-        public String msg;
-
-    }
-
+//    public static class Result {
+//
+//        public String code;
+//
+//        public String msg;
+//
+//    }
+//
 //    Handler mHandler = new Handler(){
 //
 //        @Override
@@ -387,34 +388,32 @@ public abstract class Request {
 
         @Override
         protected Result doInBackground(Void... params) {
-            if (resultCode != null) {
+            if (resultMode != null) {
 
-                if (callback == null) {
-
-                    Result mResult = new Result();
-
-                    mResult.code = "-1";
-
-                    mResult.msg = "RequestCallback is null";
-
-                    return mResult;
-
-                }
-                Result mResult;
                 try {
 
-                    mResult = JSON.parseObject(json, Result.class);
+                    Result mResult;
 
-                    if (mResult != null)
+                    if (callback == null) {
 
-                        if (!resultCode.onResultParse(mResult.code)) {
+                        throw new NullPointerException("RequestCallback is null");
 
-                            if (resultCode.successCode.equals(mResult.code)) {
+                    } else {
 
-                                t = parse(json);
+                        mResult = JSON.parseObject(json, resultMode.getClass());
 
+                        if (mResult != null)
+                            if (!resultMode.onResultParse(mResult.getResultCode())) {
+
+                                if (resultMode.successCode.equals(mResult.getResultCode())) {
+
+                                    t = parse(json);
+
+                                }
                             }
-                        }
+                    }
+
+                    return mResult;
 
                 } catch (Exception e) {
 
@@ -422,7 +421,7 @@ public abstract class Request {
 
                     return null;
                 }
-                return mResult;
+
             } else {
 
                 t = parse(json);
@@ -436,7 +435,7 @@ public abstract class Request {
 
             super.onPostExecute(result);
 
-            if (resultCode == null) {
+            if (resultMode == null) {
 
                 callback.onSuccess(t);
 
@@ -450,13 +449,13 @@ public abstract class Request {
 
             } else {
 
-                DLogUtils.d(getName() + "  code:" + result.code + "  msg:" + result.msg);
+                DLogUtils.d(getName() + "  code:" + result.getResultCode() + "  msg:" + result.getResultMsg());
 
-                if (resultCode.successCode.equals(result.code)) {
+                if (resultMode.successCode.equals(result.getResultCode())) {
 
                     callback.onSuccess(t);
 
-                    String msg = resultCode.resultCodeMap.get(result.code);
+                    String msg = resultMode.resultCodeMap.get(result.getResultCode());
 
                     if (!TextUtils.isEmpty(msg)) {
 
@@ -466,16 +465,16 @@ public abstract class Request {
 
                 } else {
 
-                    callback.onError(new Throwable(THROWABLE_LABEL + ":" + result.code + "-" + result.msg), false);
+                    callback.onError(new Throwable(THROWABLE_LABEL + ":" + result.getResultCode() + "-" + result.getResultMsg()), false);
 
-                    String msg = resultCode.resultCodeMap.get(result.code);
+                    String msg = resultMode.resultCodeMap.get(result.getResultCode());
 
                     if (!TextUtils.isEmpty(msg)) {
 
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
 
                     } else if (isShowServerMsg)
-                        Toast.makeText(getContext(), result.msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), result.getResultMsg(), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -488,9 +487,9 @@ public abstract class Request {
 
     }
 
-    private Context getContext(){
+    private Context getContext() {
 
-        if(context == null)
+        if (context == null)
             context = OotbConfig.mContext;
 
         return context;

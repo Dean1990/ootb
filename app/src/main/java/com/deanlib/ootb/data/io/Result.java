@@ -3,13 +3,13 @@ package com.deanlib.ootb.data.io;
 import java.util.HashMap;
 
 /**
- * 返回结果代号的自定义类接口
+ * 返回结果参数的自定义类接口
  *
  *
  * Created by dean on 2017/6/15.
  */
 
-public abstract class ResultCode {
+public abstract class Result {
 
     static String successCode;
 
@@ -20,21 +20,21 @@ public abstract class ResultCode {
      */
     static HashMap<String,String> resultCodeMap = new HashMap<>();
 
-    public ResultCode(String successCode){
+    public Result(String successCode){
 
         this.successCode = successCode;
 
         resultCodeMap.put(successCode,"");
     }
 
-    public ResultCode(String successCode, String successMsg){
+    public Result(String successCode, String successMsg){
 
         this.successCode = successCode;
 
         resultCodeMap.put(successCode,successMsg);
     }
 
-    public ResultCode(String successCode, HashMap<String,String> resultCodeMap){
+    public Result(String successCode, HashMap<String,String> resultCodeMap){
 
         this.successCode = successCode;
 
@@ -52,5 +52,9 @@ public abstract class ResultCode {
     public boolean onResultParse(String code){
         return false;
     }
+
+    abstract String getResultCode();
+    abstract String getResultMsg();
+//    abstract T getResultData();
 
 }

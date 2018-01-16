@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.deanlib.ootb.data.io.ILoadingDialog;
 import com.deanlib.ootb.data.io.IRequestParam;
-import com.deanlib.ootb.data.io.ResultCode;
+import com.deanlib.ootb.data.io.Result;
 import com.deanlib.ootb.data.io.Request;
 import com.deanlib.ootb.utils.DLogUtils;
 
@@ -65,15 +65,15 @@ public class OotbConfig {
      * 使用Requst类时，必须先对其设置
      * @param requestServer
      * @param param
-     * @param code
+     * @param resultMode
      */
-    public static void setRequestServer(String requestServer, IRequestParam param, ResultCode code, ILoadingDialog dialog){
+    public static void setRequestServer(String requestServer, IRequestParam param, Result resultMode, ILoadingDialog dialog){
 
         Request.SERVER = requestServer;
 
         Request.iRequestParam = param;
 
-        Request.resultCode = code;
+        Request.resultMode = resultMode;
 
         Request.iLoadingDialog = dialog;
 
@@ -91,7 +91,7 @@ public class OotbConfig {
     }
 
     /**
-     * 设置网络请求的假数据开关e
+     * 设置网络请求的假数据开关
      * 在实现request的parse方法中设置假数据，默认json = {}
      * 做为测试时使用，开启后，不会请求网络而直接调用parse方法，并回调RequestCallback的onSuccess和onFinish方法。
      *
