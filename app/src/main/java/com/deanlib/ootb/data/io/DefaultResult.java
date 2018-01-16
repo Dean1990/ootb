@@ -19,12 +19,12 @@ public class DefaultResult extends Result {
     }
 
     @Override
-    String getResultCode() {
+    public String getResultCode() {
         return code;
     }
 
     @Override
-    String getResultMsg() {
+    public String getResultMsg() {
         return msg;
     }
 
