@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 public abstract class Result {
 
-    static String successCode;
+    protected static String successCode;
 
     /**
      * key:code,value:msg
      *
      * msg的显示级别高于服务器信息，当msg不为空时，优先展示msg信息并屏蔽服务器的msg信息
      */
-    static HashMap<String,String> resultCodeMap = new HashMap<>();
+    protected static HashMap<String,String> resultCodeMap = new HashMap<>();
 
     public Result(String successCode){
 

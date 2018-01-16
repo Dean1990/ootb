@@ -14,8 +14,7 @@ public class DefaultResult extends Result {
     String msg;
 
     public DefaultResult() {
-        super(successCode);
-        successCode = "200";
+        super("200");
     }
 
     @Override
