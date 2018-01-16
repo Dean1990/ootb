@@ -590,7 +590,7 @@ public abstract class Request {
      * Created by dean on 2017/6/15.
      */
 
-    public abstract class Result {
+    public static abstract class Result {
 
         protected String successCode;
 
