@@ -211,7 +211,30 @@ public class TestReq extends Request {
 }
 ```
 
- ##### 10.使用接口类请求数据
+**Tip:**在第7步中定义UserResult时，可以利用泛型技术
+
+```java
+public class UserResult<T> extends Result {
+  public String code;
+  public String msg;
+  public T data;
+```
+
+这样做可以省掉第9步定义接口时
+
+```java
+public Entity data;
+```
+
+可以写成这个样子
+
+```java
+static class Data extends UserResult<Entity>{}
+```
+
+一直想把定义接口时的声明内部静态类和parse方法的实现去掉，从Request基类中一步实现，返回需要的类型的数据，可悲是还没有实现。
+
+##### 10.使用接口类请求数据
 
 ```java
 new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
