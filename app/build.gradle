@@ -7,8 +7,8 @@ android {
 //        applicationId "com.deanlib.ootb"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 10
-        versionName "2.0.6"
+        versionCode 11
+        versionName "2.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

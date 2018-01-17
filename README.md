@@ -211,7 +211,7 @@ public class TestReq extends Request {
 }
 ```
 
-**Tip:**在第7步中定义UserResult时，可以利用泛型技术
+Tip: 在第7步中定义UserResult时，可以利用泛型技术
 
 ```java
 public class UserResult<T> extends Result {
@@ -220,17 +220,18 @@ public class UserResult<T> extends Result {
   public T data;
 ```
 
-这样做可以省掉第9步定义接口时
+这样做可以省掉内部静态类Data，在parse方法中这样写
 
 ```java
-public Entity data;
+@Override
+public Entity parse(String json) {
+    UserResult<Entity> o = 
+       JSON.parseObject(json, new UserResult<Entity>(){}.getEntityType());
+    return o.data;
+}
 ```
 
-可以写成这个样子
-
-```java
-static class Data extends UserResult<Entity>{}
-```
+这里的getEntityType()方法是基类Result的方法，用于获取带泛型的Result类，不能直接使用getClass()，因为它会擦除泛型，并且注意“{}”大括号的使用，大括号是必须的。
 
 一直想把定义接口时的声明内部静态类和parse方法的实现去掉，从Request基类中一步实现，返回需要的类型的数据，可悲是还没有实现。
 

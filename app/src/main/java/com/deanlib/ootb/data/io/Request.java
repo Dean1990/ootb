@@ -17,6 +17,7 @@ import org.xutils.common.util.MD5;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -603,9 +604,7 @@ public abstract class Request {
 
         public Result(String successCode) {
 
-            this.successCode = successCode;
-
-            resultCodeMap.put(successCode, "");
+            this(successCode,"");
         }
 
         public Result(String successCode, String successMsg) {
@@ -622,6 +621,10 @@ public abstract class Request {
             resultCodeMap.put(successCode, resultCodeMap.get(successCode));
 
             this.resultCodeMap.putAll(resultCodeMap);
+        }
+
+        public Type getEntityType(){
+            return this.getClass().getGenericSuperclass();
         }
 
         /**
