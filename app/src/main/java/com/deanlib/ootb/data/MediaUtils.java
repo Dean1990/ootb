@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 
 
 import com.deanlib.ootb.OotbConfig;
@@ -203,7 +202,6 @@ public class MediaUtils {
      * @param intent
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Uri getImageUri(Intent intent) {
         ContentResolver cr = OotbConfig.mContext.getContentResolver();
         Uri uri = intent.getData();

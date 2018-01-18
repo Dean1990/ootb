@@ -1,5 +1,6 @@
 package com.deanlib.ootb.data;
 
+import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +10,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
@@ -258,7 +258,7 @@ public class FileUtils {
      * @see #isLocal(String)
      * @author paulburke
      */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getPath(final Uri uri) {
 
 //        if (UtilsConfig.isDEBUG())
@@ -455,7 +455,6 @@ public class FileUtils {
     /**
      * @return The MIME type for the give Uri.
      */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getMimeType(Uri uri) {
         File file = new File(getPath(uri));
         return getMimeType(file);
