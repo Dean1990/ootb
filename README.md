@@ -143,6 +143,8 @@ public class UserResult extends Result {
   }
 }
 ```
+当返回结果不是以“返回码”做为数据正确与否的判断时，返回的数据没有规律可言的情况下，可以放弃定义网络请求返回值，OotbConfig.setRequestServer方法传null，又或是当大部分返回数据是有规律的，只有个别数据不守规矩，可以使用Request.execute(RequestCallback callback, final boolean resultDeal) 方法，设置resultDeal为false，来屏蔽返回数据的自动处理部分（自动处理部分可以通过“返回码”决定数据的取舍）。
+
 ##### 8. 定义网络请求加载框
 
 ```java

@@ -206,13 +206,36 @@ public abstract class Request {
     }
 
     /**
+     * @see Request#execute(RequestCallback, boolean)
+     * @param showDialog
+     * @param callback
+     * @param <T>
+     * @return
+     */
+    public <T> Callback.Cancelable execute(boolean showDialog,RequestCallback callback) {
+        return execute(showDialog, callback,true);
+    }
+
+    /**
+     * @see Request#execute(RequestCallback, boolean)
+     * @param callback
+     * @param resultDeal
+     * @param <T>
+     * @return
+     */
+    public <T> Callback.Cancelable execute(RequestCallback callback,boolean resultDeal) {
+        return execute(true, callback, resultDeal);
+    }
+
+    /**
      * 执行网络请求方法
      *
      * @param showDialog 是否显示加载框
      * @param callback   回调函数
+     * @param resultDeal    对结果按用户定义的Result类做初步处理
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback) {
+    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback, final boolean resultDeal) {
 
         if (showDialog)
             showLoadingDialog();
@@ -251,8 +274,7 @@ public abstract class Request {
 
                         DLogUtils.d(getName() + ": " + result);
 
-                        new ParseTask<T>(result, callback).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+                        new ParseTask<T>(result, callback,resultDeal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                 }
 
@@ -294,8 +316,7 @@ public abstract class Request {
                     if (isCache) {
 
                         DLogUtils.d(getName() + ": 使用缓存数据");
-
-                        new ParseTask<T>(result, callback).execute();
+                        new ParseTask<T>(result, callback,resultDeal).execute();
                     }
 
                     return isCache;
@@ -381,16 +402,20 @@ public abstract class Request {
 
         T t;
 
-        public ParseTask(String json, RequestCallback<T> callback) {
+        boolean resultDeal;
+
+        public ParseTask(String json, RequestCallback<T> callback,boolean resultDeal) {
 
             this.json = json;
 
             this.callback = callback;
+
+            this.resultDeal = resultDeal;
         }
 
         @Override
         protected Result doInBackground(Void... params) {
-            if (resultMode != null) {
+            if (resultMode != null && resultDeal) {
 
                 try {
 
@@ -437,7 +462,7 @@ public abstract class Request {
 
             super.onPostExecute(result);
 
-            if (resultMode == null) {
+            if (resultMode == null || !resultDeal) {
 
                 callback.onSuccess(t);
 
@@ -604,7 +629,7 @@ public abstract class Request {
 
         public Result(String successCode) {
 
-            this(successCode,"");
+            this(successCode, "");
         }
 
         public Result(String successCode, String successMsg) {
@@ -623,7 +648,7 @@ public abstract class Request {
             this.resultCodeMap.putAll(resultCodeMap);
         }
 
-        public Type getEntityType(){
+        public Type getEntityType() {
             return this.getClass().getGenericSuperclass();
         }
 
