@@ -1,6 +1,8 @@
 package com.deanlib.ootb.utils;
 
 
+import android.content.Context;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -183,6 +185,8 @@ public class FormatUtils {
 
     /**
      * 格式化单位
+     * 可参考
+     * @see android.text.format.Formatter#formatFileSize(Context, long)
      *
      * @param size
      * @return

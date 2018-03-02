@@ -9,7 +9,9 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Parcelable;
+import android.os.StatFs;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.deanlib.ootb.R;
 import com.deanlib.ootb.OotbConfig;
 
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -247,6 +250,59 @@ public class DeviceUtils {
                 new Intent(act.getApplicationContext(), act.getClass()));
         // 发送广播
         act.sendBroadcast(shortcutintent);
+    }
+
+
+    /**
+     * 获得SD卡总大小
+     *
+     * @return
+     */
+    private long getSDTotalSize() {
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return  blockSize * totalBlocks;
+    }
+
+    /**
+     * 获得sd卡剩余容量，即可用大小
+     *
+     * @return
+     */
+    private long getSDAvailableSize() {
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return blockSize * availableBlocks;
+    }
+
+    /**
+     * 获得机身内存总大小
+     *
+     * @return
+     */
+    private long getRomTotalSize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return blockSize * totalBlocks;
+    }
+
+    /**
+     * 获得机身可用内存
+     *
+     * @return
+     */
+    private long getRomAvailableSize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return blockSize * availableBlocks;
     }
 
 }

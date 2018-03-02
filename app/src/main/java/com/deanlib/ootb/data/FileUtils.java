@@ -412,6 +412,10 @@ public class FileUtils {
         return null;
     }
 
+    public static Uri getResIdToUri(int resourceId) {
+        return Uri.parse("android.resource://" + OotbConfig.mContext.getPackageName() + "/" + resourceId);
+    }
+
     /**
      * Returns the path only (without file name).
      *
