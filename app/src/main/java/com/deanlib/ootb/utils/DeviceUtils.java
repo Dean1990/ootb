@@ -1,6 +1,7 @@
 package com.deanlib.ootb.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +21,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.deanlib.ootb.R;
 import com.deanlib.ootb.OotbConfig;
+import com.deanlib.ootb.manager.NetworkManager;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -147,15 +150,10 @@ public class DeviceUtils {
      * @return
      */
     public static boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) OotbConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null && ni.isConnectedOrConnecting();
+        return NetworkManager.isNetworkConn(OotbConfig.mContext);
     }
 
-    public static final int TYPE_NO_CONNECTION = 0x00;
-    public static final int TYPE_WIFI = 0x01;
-    public static final int TYPE_CMWAP = 0x02;
-    public static final int TYPE_CMNET = 0x03;
+
 
     /**
      * 获取当前网络类型
@@ -164,26 +162,7 @@ public class DeviceUtils {
      * @return 0：没有网络 1：WIFI网络   2：WAP网络    3：NET网络
      */
     public static int getNetworkType() {
-        int netType = TYPE_NO_CONNECTION;
-        ConnectivityManager connectivityManager = (ConnectivityManager) OotbConfig.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo == null) {
-            return netType;
-        }
-        int nType = networkInfo.getType();
-        if (nType == ConnectivityManager.TYPE_MOBILE) {
-            String extraInfo = networkInfo.getExtraInfo();
-            if(!TextUtils.isEmpty(extraInfo)){
-                if (extraInfo.toLowerCase(Locale.getDefault()).equals("cmnet")) {
-                    netType = TYPE_CMNET;
-                } else {
-                    netType = TYPE_CMWAP;
-                }
-            }
-        } else if (nType == ConnectivityManager.TYPE_WIFI) {
-            netType = TYPE_WIFI;
-        }
-        return netType;
+        return NetworkManager.getAPNType(OotbConfig.mContext);
     }
 
     /**
@@ -192,10 +171,7 @@ public class DeviceUtils {
      */
     public static boolean isWifi(){
 
-        if(getNetworkType()==TYPE_WIFI)
-            return true;
-
-        return false;
+        return NetworkManager.isWifiConn(OotbConfig.mContext);
     }
 
     /**
@@ -303,6 +279,29 @@ public class DeviceUtils {
         long blockSize = stat.getBlockSize();
         long availableBlocks = stat.getAvailableBlocks();
         return blockSize * availableBlocks;
+    }
+
+    /**
+     * 判断当前的进行或者服务是否存在（是否运行）
+     * @param className
+     * @return
+     */
+    public static boolean isServiceRunning(String className) {
+        ActivityManager activityManager = (ActivityManager) OotbConfig.mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> serviceList = activityManager.getRunningServices(30);
+        //30 就是一个数字 可以用常量Integer.MAX_VALUE 代替
+
+        if (!(serviceList.size() > 0)) {
+            return false;
+        }
+        boolean isRunning = false;
+        for (int i = 0; i < serviceList.size(); i++) {
+            if (serviceList.get(i).service.getClassName().equals(className)) {
+                isRunning = true;
+                break;
+            }
+        }
+        return isRunning;
     }
 
 }

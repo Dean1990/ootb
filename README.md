@@ -363,3 +363,7 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
 
 >'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
 >>上下拉加载
+
+>'com.squareup.leakcanary:leakcanary-android:1.5.4'
+>'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+>>leakcanary内存检测

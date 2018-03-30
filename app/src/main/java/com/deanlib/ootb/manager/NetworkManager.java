@@ -24,6 +24,10 @@ public class NetworkManager {
 	
 	private static final String TAG = NetworkManager.class.getSimpleName();
 
+	public static final int TYPE_NO_CONNECTION = 0x00;
+	public static final int TYPE_WIFI = 0x01;
+	public static final int TYPE_CMWAP = 0x02;
+	public static final int TYPE_CMNET = 0x03;
 
 	
 	public interface NetworkListener{
@@ -95,7 +99,7 @@ public class NetworkManager {
 		 public void onReceive(Context context, Intent intent) {
 			 	String action = intent.getAction();
 				LogUtil.d(action);
-				if(DeviceUtils.getNetworkType()==DeviceUtils.TYPE_NO_CONNECTION){
+				if(DeviceUtils.getNetworkType()==TYPE_NO_CONNECTION){
 					NetworkManager.enable = false;
 					LogUtil.d("没有网络");
 					for(NetworkListener lis:listeners){
@@ -104,7 +108,7 @@ public class NetworkManager {
 					return;
 				}
 				
-				if(DeviceUtils.getNetworkType()==DeviceUtils.TYPE_WIFI){
+				if(DeviceUtils.getNetworkType()==TYPE_WIFI){
 					wifiAction(intent, action);
 				}else {
 					wapAction(intent, action);
@@ -176,5 +180,89 @@ public class NetworkManager {
 			}
 		}
 		 
+	}
+
+	/**
+	 * 获取当前的网络状态
+	 * android.permission.ACCESS_WIFI_STATE
+	 * @param context
+	 * @return
+	 */
+	public static int getAPNType(Context context) {
+		//设置默认网路类型
+		int netType = TYPE_NO_CONNECTION;
+		//获取当前的网络管理器
+		ConnectivityManager connManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		//获取网络信息
+		NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
+		if (networkInfo == null) {
+			return netType;
+		}
+		//得到网络类型
+		int nType = networkInfo.getType();
+		if (nType == ConnectivityManager.TYPE_MOBILE) {
+			netType = networkInfo.getExtraInfo().toLowerCase().equals("cmnet") ? TYPE_CMNET : TYPE_CMWAP;
+		} else if (nType == ConnectivityManager.TYPE_WIFI) {
+			netType = TYPE_WIFI;
+		}
+		return netType;
+	}
+
+	/**
+	 * 判断WiFi网络是否可用
+	 * android.permission.ACCESS_WIFI_STATE
+	 * @param context
+	 * @return
+	 */
+	public static boolean isWifiConn(Context context) {
+		if (context != null) {
+			ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mWiFiNetworkInfo = mConnectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			if (mWiFiNetworkInfo != null) {
+				return mWiFiNetworkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 判断数据流量是否可用
+	 * android.permission.ACCESS_WIFI_STATE
+	 * @param context
+	 * @return
+	 */
+	public static boolean isMobileConn(Context context) {
+		if (context != null) {
+			ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mMobileNetworkInfo = mConnectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			if (mMobileNetworkInfo != null) {
+				return mMobileNetworkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 判断是否有网络
+	 * android.permission.ACCESS_WIFI_STATE
+	 * @param context
+	 * @return
+	 */
+	public static boolean isNetworkConn(Context context) {
+		if (context != null) {
+			ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mNetworkInfo = mConnectivityManager
+					.getActiveNetworkInfo();
+			if (mNetworkInfo != null) {
+				return mNetworkInfo.isAvailable();
+			}
+		}
+		return false;
 	}
 }

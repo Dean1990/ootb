@@ -2,16 +2,19 @@ package com.deanlib.ootb;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.deanlib.ootb.data.io.Request;
 import com.deanlib.ootb.utils.DLogUtils;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import org.xutils.x;
 
 /**
  * 该工程配置类
- *
+ * <p>
  * 配置DEBUG,服务器地址等
- *
+ * <p>
  * Created by dean on 2017/4/24.
  */
 
@@ -19,13 +22,15 @@ public class OotbConfig {
 
 
     private static boolean DEBUG = false;
+    private static RefWatcher mRefWatcher;
 
     public static Context mContext;
+    private static Application mAppContext;
 
-    public static void init(Application context, boolean debug){
+    public static void init(Application context, boolean debug) {
 
         DEBUG = debug;
-
+        mAppContext = context;
         mContext = context.getApplicationContext();
 
         DLogUtils.getInstance();
@@ -34,11 +39,22 @@ public class OotbConfig {
 
         x.Ext.setDebug(debug);
 
+        //内存检测
+        if (!LeakCanary.isInAnalyzerProcess(context)) {
+            mRefWatcher = LeakCanary.install(context);
+        }
+
     }
 
-    public static boolean isDEBUG(){
+    public static boolean isDEBUG() {
 
         return DEBUG;
+    }
+
+    public static RefWatcher getRefWatcher() {
+        if (mRefWatcher==null)
+            mRefWatcher = LeakCanary.install(mAppContext);
+        return mRefWatcher;
     }
 
     public static String getRequestServer() {
@@ -59,11 +75,12 @@ public class OotbConfig {
 
     /**
      * 使用Requst类时，必须先对其设置
+     *
      * @param requestServer
      * @param param
      * @param result
      */
-    public static void setRequestServer(String requestServer, Request.IRequestParam param, Request.Result result, Request.ILoadingDialog dialog){
+    public static void setRequestServer(String requestServer, Request.IRequestParam param, Request.Result result, Request.ILoadingDialog dialog) {
 
         Request.SERVER = requestServer;
 
@@ -77,12 +94,12 @@ public class OotbConfig {
 
 
     /**
-     * @see OotbConfig#setRequestFalseData(boolean, long)
      * @param falseData
+     * @see OotbConfig#setRequestFalseData(boolean, long)
      */
-    public static void setRequestFalseData(boolean falseData){
+    public static void setRequestFalseData(boolean falseData) {
 
-        setRequestFalseData(falseData,0);
+        setRequestFalseData(falseData, 0);
 
     }
 
@@ -94,10 +111,10 @@ public class OotbConfig {
      * @param falseData
      * @param delayed   延迟时间毫秒
      */
-    public static void setRequestFalseData(boolean falseData,long delayed){
+    public static void setRequestFalseData(boolean falseData, long delayed) {
 
         Request.FALSEDATA = falseData;
-        Request.DELAYED = delayed<0?0:delayed;
+        Request.DELAYED = delayed < 0 ? 0 : delayed;
 
     }
 }

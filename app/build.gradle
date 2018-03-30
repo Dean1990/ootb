@@ -7,8 +7,8 @@ android {
 //        applicationId "com.deanlib.ootb"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 15
-        versionName "2.0.11"
+        versionCode 17
+        versionName "2.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -47,6 +47,8 @@ dependencies {
     compile 'com.github.Dean1990:BothwayListview:1.0.3'//双向滑动的listview
     compile 'com.belerweb:pinyin4j:2.5.1'//拼音相关
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'//上下拉加载
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'//leakcanary内存检测
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
