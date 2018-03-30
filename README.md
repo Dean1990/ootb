@@ -310,7 +310,8 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * loopviewpager
     * LoopPagerAdapterWrapper.java（支持类）
     * LoopViewPager.java（循环的ViewPager）
-      OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数）
+    
+OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数）
 
 #### 引用
 
