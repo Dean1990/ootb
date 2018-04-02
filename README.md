@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.0.8'
+	compile 'com.github.Dean1990:ootb:2.1.0'
 	...
 }
 ```
