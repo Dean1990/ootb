@@ -35,9 +35,9 @@ public class OotbConfig {
 
         DLogUtils.getInstance();
 
-        x.Ext.init(context);
+        org.xutils.x.Ext.init(context);
 
-        x.Ext.setDebug(debug);
+        org.xutils.x.Ext.setDebug(debug);
 
         //内存检测
         if (!LeakCanary.isInAnalyzerProcess(context)) {
