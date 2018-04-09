@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.1.0'
+	compile 'com.github.Dean1990:ootb:2.1.1'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.1.0',{
+    compile ('com.github.Dean1990:ootb:2.1.1',{
             exclude group: 'com.android.support'
         })
     ...
@@ -117,6 +117,7 @@ public class UserReqParam implements IRequestParam {
 ```java
 public class UserResult extends Result {
   //例如接口数据标准是这样的 {"code": "200","msg": "this is msg","data": {"xxx":"xxx",...}}
+  //需要public声明其中的'code'和'msg'
   public String code;
   public String msg;
   
@@ -132,12 +133,12 @@ public class UserResult extends Result {
   
   @Override
   public String getResultCode() {
-     return code;//指定数据请求的代表状态码的字段名称，例如{"code": "200"}中的“code”
+     return code;//指定数据请求的代表状态码，及上面声明的字段code
   }
 
   @Override
   public String getResultMsg() {
-     return msg;//指定数据请求的代表服务器信息的字段名称
+     return msg;//指定数据请求的代表服务器信息，及上面声明的字段msg
   }
 
   /**
