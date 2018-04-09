@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.deanlib.ootb.data.io.Request;
 import com.deanlib.ootb.utils.DLogUtils;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import org.xutils.x;
 
@@ -22,7 +20,7 @@ public class OotbConfig {
 
 
     private static boolean DEBUG = false;
-    private static RefWatcher mRefWatcher;
+//    private static RefWatcher mRefWatcher;
 
     public static Context mContext;
     private static Application mAppContext;
@@ -40,9 +38,9 @@ public class OotbConfig {
         org.xutils.x.Ext.setDebug(debug);
 
         //内存检测
-        if (!LeakCanary.isInAnalyzerProcess(context)) {
-            mRefWatcher = LeakCanary.install(context);
-        }
+//        if (!LeakCanary.isInAnalyzerProcess(context)) {
+//            mRefWatcher = LeakCanary.install(context);
+//        }
 
     }
 
@@ -51,11 +49,11 @@ public class OotbConfig {
         return DEBUG;
     }
 
-    public static RefWatcher getRefWatcher() {
-        if (mRefWatcher==null)
-            mRefWatcher = LeakCanary.install(mAppContext);
-        return mRefWatcher;
-    }
+//    public static RefWatcher getRefWatcher() {
+//        if (mRefWatcher==null)
+//            mRefWatcher = LeakCanary.install(mAppContext);
+//        return mRefWatcher;
+//    }
 
     public static String getRequestServer() {
         return Request.SERVER;
