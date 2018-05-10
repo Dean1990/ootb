@@ -239,11 +239,10 @@ public abstract class Request {
      */
     public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback<T> callback, final boolean resultDeal) {
 
-        if (mCallback == null) {
+        if (callback == null) {
             // throw new NullPointerException("Request mCallback is null");
-            DLogUtils.e("Request mCallback is null");
-
-            return null;
+            DLogUtils.e("Request callback is null");
+            throw new NullPointerException("Request callback is null");
         }
 
         if (showDialog)
@@ -273,7 +272,7 @@ public abstract class Request {
         Callback.Cancelable cancelable = null;
 
         if (!FALSEDATA) {
-            //默认POST请求 可以通自自定义IRequestParam改写默认设置
+            //默认POST请求 可以通过自定义IRequestParam改写默认设置
             if (params.getMethod() == HttpMethod.GET){
                 cancelable = x.http().get(params,xUtilsCalback);
             }else {
