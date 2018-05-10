@@ -529,7 +529,7 @@ public abstract class Request {
 
     private void showLoadingDialog() {
 
-        if (iLoadingDialog != null && requestCount == 0 && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()) {
+        if (iLoadingDialog != null && requestCount == 0 && getContext()!=null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()) {
             //mDialog = ProgressDialog.show(getContext(), "", "加载中...");
             mDialog = iLoadingDialog.showLoadingDialog((Activity) getContext());
         }
@@ -539,7 +539,11 @@ public abstract class Request {
     private void dismissLoadingDialog() {
 
         if (iLoadingDialog != null && requestCount == 0 && mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
+            if(getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()){
+                mDialog.dismiss();
+            }else {
+                mDialog = null;
+            }
             iLoadingDialog.dismissLoadingDialog();
         }
     }
