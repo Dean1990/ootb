@@ -413,7 +413,7 @@ public abstract class Request {
     /**
      * 解析JSON任务
      */
-    class ParseTask<T> extends AsyncTask<Void, Void, Result> {
+    class ParseTask<T> extends AsyncTask<Object, Void, Result> {
 
         String json;
 
@@ -433,7 +433,7 @@ public abstract class Request {
         }
 
         @Override
-        protected Result doInBackground(Void... params) {
+        protected Result doInBackground(Object... params) {
             if (resultMode != null && resultDeal) {
 
                 try {
