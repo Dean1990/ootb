@@ -202,7 +202,7 @@ public abstract class Request {
      * @param callback 回调函数
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T> Callback.Cancelable execute(RequestCallback<T> callback) {
+    public <T> Callback.Cancelable execute(RequestCallback callback) {
 
         return execute(true, callback);
     }
@@ -214,7 +214,7 @@ public abstract class Request {
      * @param <T>
      * @return
      */
-    public <T> Callback.Cancelable execute(boolean showDialog,RequestCallback<T> callback) {
+    public <T> Callback.Cancelable execute(boolean showDialog,RequestCallback callback) {
         return execute(showDialog, callback,true);
     }
 
@@ -225,7 +225,7 @@ public abstract class Request {
      * @param <T>
      * @return
      */
-    public <T> Callback.Cancelable execute(RequestCallback<T> callback,boolean resultDeal) {
+    public <T> Callback.Cancelable execute(RequestCallback callback,boolean resultDeal) {
         return execute(true, callback, resultDeal);
     }
 
@@ -237,7 +237,7 @@ public abstract class Request {
      * @param resultDeal    对结果按用户定义的Result类做初步处理 主要是对数据code做判断走处理过程
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback<T> callback, final boolean resultDeal) {
+    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback, final boolean resultDeal) {
 
         if (callback == null) {
             // throw new NullPointerException("Request mCallback is null");
@@ -286,7 +286,7 @@ public abstract class Request {
                 @Override
                 public void run() {
 
-                    callback.onSuccess((T)parse("{}"));
+                    callback.onSuccess(parse("{}"));
 
                     onRequestFinished(callback);
 
@@ -551,11 +551,11 @@ public abstract class Request {
     private void dismissLoadingDialog() {
 
         if (iLoadingDialog != null && requestCount == 0 && mDialog != null && mDialog.isShowing()) {
-//            if(getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()){
+            if(getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()){
                 mDialog.dismiss();
-//            }else {
-//                mDialog = null;
-//            }
+            }else {
+                mDialog = null;
+            }
             iLoadingDialog.dismissLoadingDialog();
         }
     }
