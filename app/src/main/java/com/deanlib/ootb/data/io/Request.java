@@ -276,8 +276,6 @@ public abstract class Request {
 
                         new ParseTask<T>(result, callback,resultDeal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
-
-                    onRequestFinished(callback);
                 }
 
                 @Override
@@ -511,9 +509,7 @@ public abstract class Request {
                 }
             }
 
-//            callback.onFinished();
-//
-//            dismissLoadingDialog();
+            onRequestFinished(callback);
 
         }
 
