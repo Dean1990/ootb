@@ -14,6 +14,7 @@ import com.deanlib.ootb.utils.DLogUtils;
 import org.xutils.common.Callback;
 import org.xutils.common.util.KeyValue;
 import org.xutils.common.util.MD5;
+import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -129,6 +130,7 @@ public abstract class Request {
     }
 
     RequestCallback mCallback;
+    boolean mResultDeal = true;
 
     /**
      * 强制刷新
@@ -200,7 +202,7 @@ public abstract class Request {
      * @param callback 回调函数
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T> Callback.Cancelable execute(RequestCallback callback) {
+    public <T> Callback.Cancelable execute(RequestCallback<T> callback) {
 
         return execute(true, callback);
     }
@@ -212,7 +214,7 @@ public abstract class Request {
      * @param <T>
      * @return
      */
-    public <T> Callback.Cancelable execute(boolean showDialog,RequestCallback callback) {
+    public <T> Callback.Cancelable execute(boolean showDialog,RequestCallback<T> callback) {
         return execute(showDialog, callback,true);
     }
 
@@ -223,7 +225,7 @@ public abstract class Request {
      * @param <T>
      * @return
      */
-    public <T> Callback.Cancelable execute(RequestCallback callback,boolean resultDeal) {
+    public <T> Callback.Cancelable execute(RequestCallback<T> callback,boolean resultDeal) {
         return execute(true, callback, resultDeal);
     }
 
@@ -232,17 +234,26 @@ public abstract class Request {
      *
      * @param showDialog 是否显示加载框
      * @param callback   回调函数
-     * @param resultDeal    对结果按用户定义的Result类做初步处理
+     * @param resultDeal    对结果按用户定义的Result类做初步处理 主要是对数据code做判断走处理过程
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback, final boolean resultDeal) {
+    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback<T> callback, final boolean resultDeal) {
+
+        if (mCallback == null) {
+            // throw new NullPointerException("Request mCallback is null");
+            DLogUtils.e("Request mCallback is null");
+
+            return null;
+        }
 
         if (showDialog)
             showLoadingDialog();
 
         requestCount++;
+        mCallback = callback;
+        mResultDeal = resultDeal;
 
-        if (true) {
+        if (OotbConfig.isDEBUG()) {
             for (int i = 0; params().getHeaders() != null && i < params().getHeaders().size(); i++) {
                 DLogUtils.d("Header >>> " + params().getHeaders().get(i).key + " : " + params().getHeaders().get(i).getValueStr());
             }
@@ -262,61 +273,12 @@ public abstract class Request {
         Callback.Cancelable cancelable = null;
 
         if (!FALSEDATA) {
-
-            cancelable = x.http().post(params, new Callback.CacheCallback<String>() {
-
-                @Override
-                public void onSuccess(String result) {
-
-                    if (result != null) {
-
-                        DLogUtils.d(getName() + ": 网络请求任务成功");
-
-                        DLogUtils.d(getName() + ": " + result);
-
-                        new ParseTask<T>(result, callback,resultDeal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                }
-
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-
-                    DLogUtils.d(getName() + ": 网络请求任务失败");
-
-                    ex.printStackTrace();
-
-                    callback.onError(ex, isOnCallback);
-
-                    onRequestFinished(callback);
-
-                }
-
-                @Override
-                public void onCancelled(CancelledException cex) {
-
-                    DLogUtils.d(getName() + ": 网络请求任务被取消");
-
-                    callback.onCancelled(cex);
-
-                }
-
-                @Override
-                public void onFinished() {
-                    //xUtils的这个方法在onSuccess之前调用，有些不妥
-                }
-
-                @Override
-                public boolean onCache(String result) {
-
-                    if (isCache) {
-
-                        DLogUtils.d(getName() + ": 使用缓存数据");
-                        new ParseTask<T>(result, callback,resultDeal).execute();
-                    }
-
-                    return isCache;
-                }
-            });
+            //默认POST请求 可以通自自定义IRequestParam改写默认设置
+            if (params.getMethod() == HttpMethod.GET){
+                cancelable = x.http().get(params,xUtilsCalback);
+            }else {
+                cancelable = x.http().post(params, xUtilsCalback);
+            }
 
         } else {
             DLogUtils.d(getName() + ": 假数据测试,延时：" + DELAYED + "毫秒");
@@ -325,7 +287,7 @@ public abstract class Request {
                 @Override
                 public void run() {
 
-                    callback.onSuccess(parse("{}"));
+                    callback.onSuccess((T)parse("{}"));
 
                     onRequestFinished(callback);
 
@@ -337,6 +299,61 @@ public abstract class Request {
 
         return cancelable;
     }
+
+    Callback.CacheCallback xUtilsCalback = new Callback.CacheCallback<String>() {
+
+        @Override
+        public void onSuccess(String result) {
+
+            if (result != null) {
+
+                DLogUtils.d(getName() + ": 网络请求任务成功");
+
+                DLogUtils.d(getName() + ": " + result);
+
+                new ParseTask(result, mCallback,mResultDeal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }
+
+        @Override
+        public void onError(Throwable ex, boolean isOnCallback) {
+
+            DLogUtils.d(getName() + ": 网络请求任务失败");
+
+            ex.printStackTrace();
+
+            mCallback.onError(ex, isOnCallback);
+
+            onRequestFinished(mCallback);
+
+        }
+
+        @Override
+        public void onCancelled(Callback.CancelledException cex) {
+
+            DLogUtils.d(getName() + ": 网络请求任务被取消");
+
+            mCallback.onCancelled(cex);
+
+        }
+
+        @Override
+        public void onFinished() {
+            //xUtils的这个方法在onSuccess之前调用，有些不妥
+        }
+
+        @Override
+        public boolean onCache(String result) {
+
+            if (isCache) {
+
+                DLogUtils.d(getName() + ": 使用缓存数据");
+                new ParseTask(result, mCallback,mResultDeal).execute();
+            }
+
+            return isCache;
+        }
+    };
 
     private void onRequestFinished(RequestCallback callback){
         DLogUtils.d(getName() + ": 网络请求任务完成");
