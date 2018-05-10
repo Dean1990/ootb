@@ -551,11 +551,11 @@ public abstract class Request {
     private void dismissLoadingDialog() {
 
         if (iLoadingDialog != null && requestCount == 0 && mDialog != null && mDialog.isShowing()) {
-            if(getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()){
+//            if(getContext() != null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()){
                 mDialog.dismiss();
-            }else {
-                mDialog = null;
-            }
+//            }else {
+//                mDialog = null;
+//            }
             iLoadingDialog.dismissLoadingDialog();
         }
     }
