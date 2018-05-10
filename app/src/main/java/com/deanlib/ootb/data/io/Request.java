@@ -276,6 +276,8 @@ public abstract class Request {
 
                         new ParseTask<T>(result, callback,resultDeal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
+
+                    onRequestFinished(callback);
                 }
 
                 @Override
@@ -286,6 +288,8 @@ public abstract class Request {
                     ex.printStackTrace();
 
                     callback.onError(ex, isOnCallback);
+
+                    onRequestFinished(callback);
 
                 }
 
@@ -300,14 +304,7 @@ public abstract class Request {
 
                 @Override
                 public void onFinished() {
-
-                    DLogUtils.d(getName() + ": 网络请求任务完成");
-
-                    callback.onFinished();
-
-                    requestCount--;
-
-                    dismissLoadingDialog();
+                    //xUtils的这个方法在onSuccess之前调用，有些不妥
                 }
 
                 @Override
@@ -332,9 +329,7 @@ public abstract class Request {
 
                     callback.onSuccess(parse("{}"));
 
-                    callback.onFinished();
-                    requestCount--;
-                    dismissLoadingDialog();
+                    onRequestFinished(callback);
 
                 }
             }, DELAYED);
@@ -343,6 +338,16 @@ public abstract class Request {
         }
 
         return cancelable;
+    }
+
+    private void onRequestFinished(RequestCallback callback){
+        DLogUtils.d(getName() + ": 网络请求任务完成");
+
+        callback.onFinished();
+
+        requestCount--;
+
+        dismissLoadingDialog();
     }
 
 
