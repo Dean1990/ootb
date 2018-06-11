@@ -1,6 +1,6 @@
 #### 简介
 
-这是一个Android开发的工具集合,或者叫CodeBase
+这是一个Android开发的工具集合,或者叫CodeBase。  [![](https://jitpack.io/v/Dean1990/OOTB.svg)](https://jitpack.io/#Dean1990/OOTB)
 
 #### 配置
 
