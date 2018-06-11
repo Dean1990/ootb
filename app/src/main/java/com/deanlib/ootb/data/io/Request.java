@@ -31,17 +31,6 @@ import java.util.TreeMap;
  */
 public abstract class Request {
 
-    public static int requestCount;
-
-    /**
-     * 服务器地址
-     */
-    public static String SERVER = "";
-    //假数据
-    public static boolean FALSEDATA = false;
-    //假数据延时
-    public static long DELAYED = 0;
-
     public static final long EXPIRE_SECOND = 1000;
     public static final long EXPIRE_SECOND_10 = 1000 * 10;
     public static final long EXPIRE_MINUTE = 1000 * 60;
@@ -51,6 +40,21 @@ public abstract class Request {
     public static final long EXPIRE_WEEK = 1000 * 60 * 60 * 24 * 7;
     public static final long EXPIRE_MONTH = 1000 * 60 * 60 * 24 * 30;
     public static final long EXPIRE_YEAR = 1000 * 60 * 60 * 24 * 365;
+
+
+    public static int requestCount;//当前请求次数
+    /**
+     * 服务器地址
+     */
+    public static String SERVER = "";
+    //假数据
+    public static boolean FALSEDATA = false;
+    //假数据延时
+    public static long DELAYED = 0;
+    public static Dialog mDialog;//加载框
+    public static IRequestParam iRequestParam;
+    public static Result resultMode;
+    public static ILoadingDialog iLoadingDialog;
 
     /**
      * 用于标识服务器内部规定的错误类型（区分）
@@ -62,12 +66,23 @@ public abstract class Request {
 //	/** Https 证书验证对象 */
 //	private static SSLContext s_sSLContext = null;
 
-    static Dialog mDialog;
+    RequestCallback mCallback;
+    /**
+     * 是否处理返回结果，处理指只对返回successcode的结果给于返回，其他都报错；不处理可以让不按定义好的返回结果格式，也能返回。
+     */
+    boolean mResultDeal = true;
+    // 是否使用缓存
+    private boolean isCache;
+    // 是否展示服务器msg
+    private boolean isShowServerMsg = true;
 
     public Request(Context context) {
-
         this.context = context;
+    }
 
+    public Request(Context context,boolean resultDeal) {
+        this.context = context;
+        this.mResultDeal = resultDeal;
     }
 
     public abstract String getName();
@@ -75,9 +90,6 @@ public abstract class Request {
     public abstract RequestParams params();
 
     public abstract <T> T parse(String json);
-
-    // 是否使用缓存
-    private boolean isCache;
 
     /**
      * 设置是否使用缓存
@@ -103,9 +115,6 @@ public abstract class Request {
         return isCache;
     }
 
-    // 是否展示服务器msg
-    private boolean isShowServerMsg = true;
-
     /**
      * 设置是否显示服务器返回的信息
      *
@@ -128,9 +137,6 @@ public abstract class Request {
 
         return isShowServerMsg;
     }
-
-    RequestCallback mCallback;
-    boolean mResultDeal = true;
 
     /**
      * 强制刷新
@@ -189,10 +195,6 @@ public abstract class Request {
 //        return this;
 //
 //    }
-
-    public static IRequestParam iRequestParam;
-    public static Result resultMode;
-    public static ILoadingDialog iLoadingDialog;
 
 
     /**
@@ -356,11 +358,8 @@ public abstract class Request {
 
     private void onRequestFinished(RequestCallback callback){
         DLogUtils.d(getName() + ": 网络请求任务完成");
-
         callback.onFinished();
-
         requestCount--;
-
         dismissLoadingDialog();
     }
 
@@ -557,6 +556,21 @@ public abstract class Request {
                 mDialog = null;
             }
             iLoadingDialog.dismissLoadingDialog();
+        }
+    }
+
+    /**
+     * 取消加载框
+     * 有时需要手动取消加载框  比如当用户在 RequestCallback 的各回调方法中，调用finish，就需要在finish之前手动取消加载框
+     * 为了以免忘记以上类似情况的关闭activity，建议在 base activity or base fragment 中统一处理
+     */
+    public static void dismissDialog(){
+        requestCount = 0;
+        if (mDialog!=null && mDialog.isShowing()) {
+            mDialog.dismiss();
+            mDialog = null;
+            if (iLoadingDialog!=null)
+                iLoadingDialog.dismissLoadingDialog();
         }
     }
 

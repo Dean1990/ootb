@@ -80,10 +80,11 @@ public class DeviceUtils {
      */
     public static void hideKeyboard(Activity act){
 
-        InputMethodManager imm = (InputMethodManager) act.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        imm.hideSoftInputFromInputMethod(act.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
+        View view = act.getWindow().peekDecorView();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) act.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 
     }
 

@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.1.2'
+	compile 'com.github.Dean1990:ootb:2.2.0'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.1.2',{
+    compile ('com.github.Dean1990:ootb:2.2.0',{
             exclude group: 'com.android.support'
         })
     ...
@@ -158,7 +158,7 @@ public class UserResult extends Result {
   }
 }
 ```
-当返回结果不是以“返回码”做为数据正确与否的判断时，返回的数据没有规律可言的情况下，可以放弃定义网络请求返回值，OotbConfig.setRequestServer方法传null，又或是当大部分返回数据是有规律的，只有个别数据不守规矩，可以使用Request.execute(RequestCallback callback, boolean resultDeal) 方法，设置resultDeal为false，来屏蔽返回数据的自动处理部分（自动处理部分可以通过“返回码”决定数据的取舍）。
+当返回结果不是以“返回码”做为数据正确与否的判断时，返回的数据没有规律可言的情况下，可以放弃定义网络请求返回值，OotbConfig.setRequestServer方法传null，又或是当大部分返回数据是有规律的，只有个别数据不守规矩，可以使用Request.execute(RequestCallback callback, boolean resultDeal) 方法，或者在继承Request抽象类时，在构造方法中调用 super(Conext context,boolean resultDeal) 方式，设置resultDeal为false，来屏蔽返回数据的自动处理部分（自动处理部分可以通过“返回码”决定数据的取舍）。
 
 ##### 8. 定义网络请求加载框
 
@@ -185,6 +185,16 @@ public class UserLoadingDialog extends ILoadingDialog {
     //网络请求结束，关闭加载框时会调用该方法
   }
 
+}
+```
+
+由于加载框的结束时间（dismiss）是在Request.RequestCallback 的所有调用方法之后，及 onFinished() 之后，所以在Request.RequestCallback 的所有调用方法中，都不建议使用Activity.finish() 等关闭Activity的方法（虽然不会造成App 闪退，日志会报错“android.view.WindowManager$BadTokenException”），因为加载框是附着在 Activity之上的（从 public Request(Context context) 传过去的，如果context 传值并非 Activity ，不会出现任何加载框，请忽略该模块讲解内容），所以Request 提供了dismissDialog() 方法，并且建议在Activity或Fragment的基类中使用。
+
+```java
+@Override
+protected void onDestroy() {
+    Request.dismissDialog();
+    super.onDestroy();
 }
 ```
 
@@ -319,13 +329,12 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
     * GlideRoundTransform.java（Glide加载图片圆角）
   * CirclePageRightIndicator.java（显示在右侧的小圆点指示器，存在BUG，无法用wrap_content控制住大小，需要设置固定值，或者代码计算设置）
   * GridViewForScrollView.java（支持嵌套在ScrollView中的GridView）
-  * HorizontalListView.java（横向的ListView）
   * LazyViewPager.java（懒加载的ViewPager）
   * ListViewForScrollView.java（支持嵌套在ScrollView中的ListView）
   * loopviewpager
     * LoopPagerAdapterWrapper.java（支持类）
     * LoopViewPager.java（循环的ViewPager）
-    
+
 OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数）
 
 #### 引用
@@ -380,6 +389,6 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 >'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
 >>上下拉加载
 
->'com.squareup.leakcanary:leakcanary-android:1.5.4'
->'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
->>leakcanary内存检测
+>'org.jsoup:jsoup:1.11.3'
+>
+>>Jsoup HTML操作
