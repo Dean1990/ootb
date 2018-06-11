@@ -188,13 +188,13 @@ public class UserLoadingDialog extends ILoadingDialog {
 }
 ```
 
-由于加载框的结束时间（dismiss）是在Request.RequestCallback 的所有调用方法之后，及 onFinished() 之后，所以在Request.RequestCallback 的所有调用方法中，都不建议使用Activity.finish() 等关闭Activity的方法（虽然不会造成App 闪退，日志会报错“android.view.WindowManager$BadTokenException”），因为加载框是附着在 Activity之上的（从 public Request(Context context) 传过去的，如果context 传值并非 Activity ，不会出现任何加载框，请忽略该模块讲解内容），所以Request 提供了dismissDialog() 方法，并且建议在Activity或Fragment的基类中使用。
+由于加载框的结束时间（dismiss）是在Request.RequestCallback 的所有调用方法之后，及 onFinished() 之后，所以在Request.RequestCallback 的所有调用方法中，都不建议使用Activity.finish() 等关闭Activity的方法（虽然不会造成App 闪退，日志会报错“android.view.WindowLeaked”），因为加载框是附着在 Activity之上的（从 public Request(Context context) 传过去的，如果context 传值并非 Activity ，不会出现任何加载框，请忽略该模块讲解内容），所以Request 提供了dismissDialog() 方法，并且建议在Activity的基类中使用。
 
 ```java
 @Override
-protected void onDestroy() {
+public void finish() {
     Request.dismissDialog();
-    super.onDestroy();
+    super.finish();
 }
 ```
 

@@ -562,7 +562,7 @@ public abstract class Request {
     /**
      * 取消加载框
      * 有时需要手动取消加载框  比如当用户在 RequestCallback 的各回调方法中，调用finish，就需要在finish之前手动取消加载框
-     * 为了以免忘记以上类似情况的关闭activity，建议在 base activity or base fragment 中统一处理
+     * 为了以免忘记以上类似情况的关闭activity，建议在 base activity 中统一处理
      */
     public static void dismissDialog(){
         requestCount = 0;
