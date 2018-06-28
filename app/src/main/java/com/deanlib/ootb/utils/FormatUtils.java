@@ -2,14 +2,19 @@ package com.deanlib.ootb.utils;
 
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StrikethroughSpan;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * 格式化类
+ * 区别于TextUtils更偏向于文字操作和编码相关
  * <p>
  * DATE:时间
  * NUM:数值
@@ -137,12 +142,12 @@ public class FormatUtils {
     }
 
     /**
-     * 数值转带单位的字符串
+     * 格式化数值转带单位的字符串
      *
      * @param num 数值
      * @return 大于1000时带单位
      */
-    public static String convertNumLongToDescribeString(long num) {
+    public static String formatNum(long num) {
 
         if (num < 1000)
             return num + "";
@@ -184,14 +189,14 @@ public class FormatUtils {
     }
 
     /**
-     * 格式化单位
+     * 格式化计算机容量单位
      * 可参考
      * @see android.text.format.Formatter#formatFileSize(Context, long)
      *
-     * @param size
+     * @param size 单位byte
      * @return
      */
-    public static String getFormatSize(double size) {
+    public static String formatFileSize(double size) {
         double kiloByte = size / 1024;
         if (kiloByte < 1) {
 //            return size + "Byte";
@@ -222,4 +227,71 @@ public class FormatUtils {
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
                 + "TB";
     }
+
+    /**
+     * 格式化重量单位
+     * @param weight 单位g
+     * @return
+     */
+    public static String formatWeight(float weight){
+        //按g换算
+        if (weight >= 1000) {
+            return (weight/1000)+"kg";
+        }else {
+            return weight+"g";
+        }
+    }
+
+    /**
+     * 格式化人民币
+     * @param money
+     * @return
+     */
+    public static String formatRMB(float money){
+        BigDecimal decimal = new BigDecimal(money);
+        return formatRMB(decimal.setScale(2,BigDecimal.ROUND_DOWN).toString());
+    }
+
+    public static String formatRMB(String money){
+        return "¥ " + money;
+    }
+
+    /**
+     * 隐藏手机号中间部分
+     * @param num
+     * @return
+     */
+    public static String hidePhoneNum(String num){
+
+        if (ValidateUtils.isMobileNum(num)) {
+
+            return num.substring(0,3)+"****"+num.substring(num.length()-4);
+        }else return num;
+    }
+
+    /**
+     * 格式 删除线
+     * @param str
+     * @return
+     */
+    public static SpannableString formatStrike(String str){
+        SpannableString ss = new SpannableString(str);
+        ss.setSpan(new StrikethroughSpan(),0,str.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return ss;
+    }
+
+    /**
+     * 字符串转数值
+     * @param str
+     * @return
+     */
+    public static float convertStringToNum(String str){
+        if (str!=null) {
+            if (Pattern.matches("\\d+\\.?\\d*", str)) {
+                return Float.parseFloat(str);
+            }
+        }
+        return 0;
+    }
+
 }

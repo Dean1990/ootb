@@ -92,7 +92,7 @@ public class FileUtils {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             cacheSize += getFolderSize(OotbConfig.mContext.getExternalCacheDir());
         }
-        return FormatUtils.getFormatSize(cacheSize);
+        return FormatUtils.formatFileSize(cacheSize);
     }
 
 

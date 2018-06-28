@@ -12,7 +12,7 @@ import android.app.ProgressDialog;
 
 public class DefaultLoadingDialog implements Request.ILoadingDialog {
     @Override
-    public Dialog showLoadingDialog(Activity activity) {
+    public Dialog showLoadingDialog(Activity activity,String msg) {
         return ProgressDialog.show(activity, "", "加载中...");
     }
 

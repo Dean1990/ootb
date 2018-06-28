@@ -204,19 +204,6 @@ public class TextUtils {
     }
 
     /**
-     * 隐藏手机号中间部分
-     * @param num
-     * @return
-     */
-    public static String hidePhoneNum(String num){
-
-        if (ValidateUtils.isMobileNum(num)) {
-
-            return num.substring(0,3)+"****"+num.substring(num.length()-4);
-        }else return num;
-    }
-
-    /**
      * //剔除HTML空格 和 空格
      * @param s
      * @return
