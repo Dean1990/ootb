@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.2.0'
+	compile 'com.github.Dean1990:ootb:2.3.0'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.2.0',{
+    compile ('com.github.Dean1990:ootb:2.3.0',{
             exclude group: 'com.android.support'
         })
     ...
@@ -162,11 +162,19 @@ public class UserResult extends Result {
 
 ##### 8. 定义网络请求加载框
 
+首先可以使用以下方式自定义加载框内容
+
+```java
+Request.setLoadingMsg(String msg);
+```
+
+其中的 msg 信息会通过 showLoadingDialog(Activity activity ,String msg) 传递出去，如果不设置 msg ，默认信息为该类的类名，比如有一个 TestReq.java  继承自 Request，msg 默认值为“TestReq”。
+
 ```java
 public class UserLoadingDialog extends ILoadingDialog {
 
   @Override
-  public Dialog showLoadingDialog(Activity activity) {
+  public Dialog showLoadingDialog(Activity activity,String msg) {
 
     //自定义加载框
     View view = LayoutInflater.from(activity).inflate(R.layout.layout_loading, null);
@@ -265,7 +273,7 @@ public Entity parse(String json) {
 ##### 10.使用接口类请求数据
 
 ```java
-new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
+new TestReq(this,1).setLoadingMsg("测试数据正在加载...").execute(new Request.RequestCallback<Entity>() {
     @Override
     public void onSuccess(Entity o) {
         //请求成功执行
@@ -315,10 +323,13 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * PermissionManager.java（权限管理）
   * ​
 * utils
+  * AppUtils.java（应用相关）
   * DeviceUtils.java（设备相关）
   * DLogUtils.java（日志操作）
   * FormatUtils.java（格式化操作）
+  * MathUtils（数值计算操作）
   * PinyinUtils.java（拼音相关）
+  * PopupUtils（弹出界面相关）
   * TextUtils.java（文本操作）
   * ValidateUtils.java（数据验证相关）
   * VersionUtils.java（应用版本相关）
@@ -327,7 +338,7 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * glide
     * GlideCircleTransform.java（Glide加载图片圆形）
     * GlideRoundTransform.java（Glide加载图片圆角）
-  * CirclePageRightIndicator.java（显示在右侧的小圆点指示器，存在BUG，无法用wrap_content控制住大小，需要设置固定值，或者代码计算设置）
+  * CirclePageRightIndicator.java（显示在右侧的小圆点指示器，存在BUG，无法用wrap_content控制住大小，需要设置固定值，或者代码计算设置），建议使用[Android-LoopView](https://github.com/xuehuayous/Android-LoopView)
   * GridViewForScrollView.java（支持嵌套在ScrollView中的GridView）
   * LazyViewPager.java（懒加载的ViewPager）
   * ListViewForScrollView.java（支持嵌套在ScrollView中的ListView）
