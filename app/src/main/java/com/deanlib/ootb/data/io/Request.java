@@ -75,8 +75,8 @@ public abstract class Request {
     private boolean isCache;
     // 是否展示服务器msg
     private boolean isShowServerMsg = true;
-    //自定义加载框信息  默认数据为类名称
-    private String mLoadingMsg;
+    //自定义加载框信息  默认数据为类名称 做不到，系统自带弹出框不能修改
+//    private String mLoadingMsg;
 
     public Request(Context context) {
         this(context,true);
@@ -85,7 +85,7 @@ public abstract class Request {
     public Request(Context context,boolean resultDeal) {
         this.context = context;
         this.mResultDeal = resultDeal;
-        setLoadingMsg(getName());
+//        setLoadingMsg(getName());
     }
 
     public abstract String getName();
@@ -173,10 +173,10 @@ public abstract class Request {
 
     }
 
-    public Request setLoadingMsg(String msg){
-        this.mLoadingMsg = msg;
-        return this;
-    }
+//    public Request setLoadingMsg(String msg){
+//        this.mLoadingMsg = msg;
+//        return this;
+//    }
 
     //默认加签名
 //    static boolean needSign = true;
@@ -550,7 +550,7 @@ public abstract class Request {
 
         if (iLoadingDialog != null && requestCount == 0 && getContext()!=null && getContext() instanceof Activity && !((Activity) getContext()).isFinishing()) {
             //mDialog = ProgressDialog.show(getContext(), "", "加载中...");
-            mDialog = iLoadingDialog.showLoadingDialog((Activity) getContext(),mLoadingMsg);
+            mDialog = iLoadingDialog.showLoadingDialog((Activity) getContext());
         }
 
     }
@@ -642,10 +642,9 @@ public abstract class Request {
          * 需要生成一个加载框，并返回给这个方法
          *
          * @param activity
-         * @param msg 请求时设置内容
          * @return
          */
-        Dialog showLoadingDialog(Activity activity,String msg);
+        Dialog showLoadingDialog(Activity activity);
 
         /**
          * 加载框关闭时被调用
