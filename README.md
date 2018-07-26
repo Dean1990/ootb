@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.3.1'
+	compile 'com.github.Dean1990:ootb:2.4.0'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.3.1',{
+    compile ('com.github.Dean1990:ootb:2.4.0',{
             exclude group: 'com.android.support'
         })
     ...
@@ -158,7 +158,7 @@ public class UserResult extends Result {
   }
 }
 ```
-当返回结果不是以“返回码”做为数据正确与否的判断时，返回的数据没有规律可言的情况下，可以放弃定义网络请求返回值，OotbConfig.setRequestServer方法传null，又或是当大部分返回数据是有规律的，只有个别数据不守规矩，可以使用Request.execute(RequestCallback callback, boolean resultDeal) 方法，或者在继承Request抽象类时，在构造方法中调用 super(Conext context,boolean resultDeal) 方式，设置resultDeal为false，来屏蔽返回数据的自动处理部分（自动处理部分可以通过“返回码”决定数据的取舍）。
+当返回结果不是以“返回码”做为数据正确与否的判断时，返回的数据没有规律可言的情况下，可以放弃定义网络请求返回值，OotbConfig.setRequestServer方法Request.Result参数传null，又或是当大部分返回数据是有规律的，只有个别数据不守规矩，可以在继承Request抽象类时，在构造方法中调用 super(Conext context,boolean resultDeal) 方式，设置resultDeal为false，来屏蔽返回数据的自动处理部分（自动处理部分可以通过“返回码”决定数据的取舍）。
 
 ##### 8. 定义网络请求加载框
 
@@ -327,10 +327,6 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * VersionUtils.java（应用版本相关）
   * WifiAutoConnectUtils（自动连接WIFI工具）
 * widget
-  * glide
-    * GlideCircleTransform.java（Glide加载图片圆形）
-    * GlideRoundTransform.java（Glide加载图片圆角）
-  * CirclePageRightIndicator.java（显示在右侧的小圆点指示器，存在BUG，无法用wrap_content控制住大小，需要设置固定值，或者代码计算设置），建议使用[Android-LoopView](https://github.com/xuehuayous/Android-LoopView)
   * GridViewForScrollView.java（支持嵌套在ScrollView中的GridView）
   * LazyViewPager.java（懒加载的ViewPager）
   * ListViewForScrollView.java（支持嵌套在ScrollView中的ListView）
@@ -355,9 +351,6 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 
 >'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
 >>以上两个用来权限申请
-
->'com.inkapplications.viewpageindicator:library:2.4.3'
->>CirclePageRightIndicator.java用到
 
 >'com.github.PhilJay:MPAndroidChart:v3.0.2'
 >>图表绘制
@@ -395,3 +388,32 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 >'org.jsoup:jsoup:1.11.3'
 >
 >>Jsoup HTML操作
+
+> 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+>
+> > 点击绑定 防抖 如果能和 butterknife 合二为一就好，这是下一步应该考虑的问题
+
+> 'io.reactivex:rxjava:1.0.14'
+> 'io.reactivex:rxandroid:1.0.1'
+>
+> > RxJava 异步
+
+> 'com.jakewharton:butterknife:8.8.1'
+> 'com.jakewharton:butterknife-compiler:8.8.1'
+>
+> > 注解绑定 配合AS的Generate Butterknife Injections插件效果更佳
+
+> 'jp.wasabeef:glide-transformations:3.2.0'
+> 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+>
+> > Glide的辅助类，圆角，圆形，多边，滤镜，应有尽有
+
+> 'com.kevin:loopview:1.4.1'
+>
+> > 循环播放的Banner
+
+> 'com.android.support:multidex:1.0.0'
+>
+> > 当引入OOTB后，想必是需要他的 multidex
+
+

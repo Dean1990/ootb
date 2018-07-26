@@ -3,6 +3,10 @@ package com.deanlib.ootb.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
+
+import com.deanlib.ootb.OotbConfig;
+import com.deanlib.ootb.R;
 
 /**
  * 应用操作相关
@@ -22,6 +26,32 @@ public class AppUtils {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         activity.startActivity(intent);
+    }
+
+    private long exitTime;
+
+    private boolean exit(){
+        return exit(OotbConfig.mContext.getString(R.string.again_exit));
+    }
+
+    private boolean exit(String msg){
+        return exit(msg,2000);
+    }
+
+    /**
+     * 按两次退出
+     * @param msg
+     * @param interval
+     * @return
+     */
+    private boolean exit(String msg,long interval){
+        if(System.currentTimeMillis()-exitTime>interval) {
+            PopupUtils.sendToast(msg);
+            exitTime= System.currentTimeMillis();
+            return false;
+        }
+
+        return true;
     }
 
 }

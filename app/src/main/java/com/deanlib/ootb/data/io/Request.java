@@ -68,7 +68,7 @@ public abstract class Request {
 
     RequestCallback mCallback;
     /**
-     * 是否处理返回结果，处理指只对返回successcode的结果给于返回，其他都报错；不处理可以让不按定义好的返回结果格式，也能返回。
+     * 是否处理返回结果，处理指只对返回successcode的结果给于返回，其他都报错；不处理可以让不按定义好的返回结果格式也能返回。
      */
     boolean mResultDeal = true;
     // 是否使用缓存
@@ -218,36 +218,13 @@ public abstract class Request {
     }
 
     /**
-     * @see Request#execute(RequestCallback, boolean)
-     * @param showDialog
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Callback.Cancelable execute(boolean showDialog,RequestCallback callback) {
-        return execute(showDialog, callback,true);
-    }
-
-    /**
-     * @see Request#execute(RequestCallback, boolean)
-     * @param callback
-     * @param resultDeal
-     * @param <T>
-     * @return
-     */
-    public <T> Callback.Cancelable execute(RequestCallback callback,boolean resultDeal) {
-        return execute(true, callback, resultDeal);
-    }
-
-    /**
      * 执行网络请求方法
      *
      * @param showDialog 是否显示加载框
      * @param callback   回调函数
-     * @param resultDeal    对结果按用户定义的Result类做初步处理 主要是对数据code做判断走处理过程
      * @return 返回该请求的句柄，可以用来控制其取消执行操作
      */
-    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback, final boolean resultDeal) {
+    public <T> Callback.Cancelable execute(boolean showDialog, final RequestCallback callback) {
 
         if (callback == null) {
             // throw new NullPointerException("Request mCallback is null");
@@ -260,7 +237,6 @@ public abstract class Request {
 
         requestCount++;
         mCallback = callback;
-        mResultDeal = resultDeal;
 
         if (OotbConfig.isDEBUG()) {
             for (int i = 0; params().getHeaders() != null && i < params().getHeaders().size(); i++) {
