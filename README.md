@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.4.3'
+	compile 'com.github.Dean1990:ootb:2.4.4'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.4.3',{
+    compile ('com.github.Dean1990:ootb:2.4.4',{
             exclude group: 'com.android.support'
         })
     ...
@@ -447,11 +447,6 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 > 'io.reactivex:rxandroid:1.0.1'
 >
 > > RxJava 异步
-
-> 'com.jakewharton:butterknife:8.8.1'
-> 'com.jakewharton:butterknife-compiler:8.8.1'
->
-> > 注解绑定 配合AS的Generate Butterknife Injections插件效果更佳
 
 > 'jp.wasabeef:glide-transformations:3.2.0'
 > 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
