@@ -6,3 +6,4 @@ local.properties
 Thumbs.db
 .DS_Store
 *.apk
+/ootb
