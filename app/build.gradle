@@ -8,8 +8,8 @@ android {
 //        applicationId "com.deanlib.ootb"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 32
-        versionName "2.4.2"
+        versionCode 33
+        versionName "2.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

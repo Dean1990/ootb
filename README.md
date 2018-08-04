@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.4.2'
+	compile 'com.github.Dean1990:ootb:2.4.3'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.4.2',{
+    compile ('com.github.Dean1990:ootb:2.4.3',{
             exclude group: 'com.android.support'
         })
     ...
