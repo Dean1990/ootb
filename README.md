@@ -21,24 +21,24 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.4.7'
+	compile 'com.github.Dean1990:ootb:2.4.9.1'
 	...
 }
 ```
 
-由于集成了低版本的'com.android.support:appcompat-v7:22.2.1'，项目中如果使用高版本的appcompat-v7，会报error，可修改为：
+如果你的项目中使用的引用与该项目中的引用冲突，请使用 exclude 排除，比如 org.greenrobot:eventbus 不同版本的冲突
 
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.4.7',{
-            exclude group: 'com.android.support'
+    compile ('com.github.Dean1990:ootb:2.4.9.1',{
+            exclude group: 'org.greenrobot',module:'eventbus'
         })
     ...
 }
 ```
 
-如果与其他引用冲突，也可采用此法，具体操作[百度](https://www.baidu.com/s?wd=gradle%20exclude&rsv_spt=1&rsv_iqid=0x81deb6de00048181&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_enter=1&oq=gradle%2520exclude%2520%25E5%25A4%259A%25E4%25B8%25AA&rsv_t=3b719EaqWSLeiJivTEYz6RDG7NgGhIlx5OaMAEdXaujjGigkCglQUv0nU8CHqr4A4qc%2B&inputT=468&rsv_pq=cceefc9800064a6a&rsv_sug3=32&rsv_sug1=23&rsv_sug7=100&rsv_sug2=0&rsv_sug4=1036&rsv_sug=2)
+如果与其他引用冲突，也可采用此法，具体操作[百度](https://www.baidu.com/s?wd=gradle%20exclude)
 
 ##### 3. application类
 
