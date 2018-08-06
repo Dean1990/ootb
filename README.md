@@ -21,7 +21,7 @@ allprojects {
 ```groovy
 dependencies {
 	...
-	compile 'com.github.Dean1990:ootb:2.4.1'
+	compile 'com.github.Dean1990:ootb:2.4.7'
 	...
 }
 ```
@@ -31,7 +31,7 @@ dependencies {
 ```groovy
 dependencies {
 	...
-    compile ('com.github.Dean1990:ootb:2.4.1',{
+    compile ('com.github.Dean1990:ootb:2.4.7',{
             exclude group: 'com.android.support'
         })
     ...
@@ -67,9 +67,52 @@ public void onCreate() {
 <uses-permission android:name="android.permission.CAMERA" />
 ```
 
+##### 5.集成中可能遇到问题
+
+- 因为集成的东西比较多，会出现一个打包时超过方法上限的问题，解决办法引用：
+
+  ```groovy
+  implementation 'com.android.support:multidex:1.0.0'
+  ```
+
+  Application继承 MultiDexApplication类
+
+  ```java
+  public class App extends MultiDexApplication
+  ```
+
+  设置app 的 build.gradle 文件 设置 `multiDexEnabled = true`
+
+  ```groovy
+  android {
+      compileSdkVersion 28
+      defaultConfig {
+          applicationId "com.deanlib.xxxx"
+          minSdkVersion 17
+          targetSdkVersion 28
+          versionCode 1
+          versionName "1.0"
+          multiDexEnabled = true
+   	}
+  }
+  ```
+
+  
+
+- Rajava需要在app 的 build.gradle文件设置 `packagingOptions {exclude 'META-INF/rxjava.properties'}`
+
+  ```groovy
+  android {
+      defaultConfig {...}
+      packagingOptions {exclude 'META-INF/rxjava.properties'}
+  }
+  ```
+
+  
+
 以上内容就可以正常使用OOTB，以下为扩展
 
-##### 5. 假数据测试
+##### 6. 假数据测试
 
 ###### 有时，接口还没有开发好，但需要使用假数据调试
 
@@ -90,7 +133,7 @@ public Object parse(String s) {
 }
 ```
 
-##### 6. 定义全局的网络请求参数
+##### 7. 定义全局的网络请求参数
 
 ```java
 public class UserReqParam implements IRequestParam {
@@ -112,7 +155,7 @@ public class UserReqParam implements IRequestParam {
 	}
 ```
 
-##### 7. 定义网络请求返回值
+##### 8. 定义网络请求返回值
 
 ```java
 public class UserResult extends Result {
@@ -160,7 +203,7 @@ public class UserResult extends Result {
 ```
 当返回结果不是以“返回码”做为数据正确与否的判断时，返回的数据没有规律可言的情况下，可以放弃定义网络请求返回值，OotbConfig.setRequestServer方法Request.Result参数传null，又或是当大部分返回数据是有规律的，只有个别数据不守规矩，可以在继承Request抽象类时，在构造方法中调用 super(Conext context,boolean resultDeal) 方式，设置resultDeal为false，来屏蔽返回数据的自动处理部分（自动处理部分可以通过“返回码”决定数据的取舍）。
 
-##### 8. 定义网络请求加载框
+##### 9. 定义网络请求加载框
 
 ```java
 public class UserLoadingDialog extends ILoadingDialog {
@@ -198,7 +241,7 @@ public void finish() {
 }
 ```
 
-##### 9.定义一个接口类
+##### 10.定义一个接口类
 
 ```java
 public class TestReq extends Request {
@@ -262,7 +305,7 @@ public Entity parse(String json) {
 
 一直想把定义接口时的声明内部静态类和parse方法的实现去掉，从Request基类中一步实现，返回需要的类型的数据，可悲是还没有实现。
 
-##### 10.使用接口类请求数据
+##### 11.使用接口类请求数据
 
 ```java
 new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
@@ -308,12 +351,15 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * ImageUtils.java（图片操作）
   * MediaUtils.java（多媒体相关）
   * PersistenceUtils.java（持久化操作,有时感觉这个类有点鸡肋）
+
 * entity
   * BaseEntiy.java（基础实体类）
+
 * manager
   * NetworkManager.java（网络管理）
   * PermissionManager.java（权限管理）
   * ​
+
 * utils
   * AppUtils.java（应用相关）
   * DeviceUtils.java（设备相关）
@@ -326,7 +372,11 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * ValidateUtils.java（数据验证相关）
   * VersionUtils.java（应用版本相关）
   * WifiAutoConnectUtils（自动连接WIFI工具）
+
 * widget
+
+  - CustomScrollView （带滚动监听，可替换低版本中ScrollView）
+
   * GridViewForScrollView.java（支持嵌套在ScrollView中的GridView）
   * LazyViewPager.java（懒加载的ViewPager）
   * ListViewForScrollView.java（支持嵌套在ScrollView中的ListView）
@@ -398,11 +448,6 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 >
 > > RxJava 异步
 
-> 'com.jakewharton:butterknife:8.8.1'
-> 'com.jakewharton:butterknife-compiler:8.8.1'
->
-> > 注解绑定 配合AS的Generate Butterknife Injections插件效果更佳
-
 > 'jp.wasabeef:glide-transformations:3.2.0'
 > 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
 >
@@ -411,9 +456,4 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 > 'com.kevin:loopview:1.4.1'
 >
 > > 循环播放的Banner
-
-> 'com.android.support:multidex:1.0.0'
->
-> > 当引入OOTB后，想必是需要他的 multidex
-
 

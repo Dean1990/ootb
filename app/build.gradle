@@ -7,8 +7,8 @@ android {
 //        applicationId "com.deanlib.ootb"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 31
-        versionName "2.4.1"
+        versionCode 37
+        versionName "2.4.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -53,13 +53,10 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'jp.wasabeef:glide-transformations:3.2.0'
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'// If you want to use the GPU Filters
     compile 'com.kevin:loopview:1.4.1'//循环播放的banner
 
-    compile 'com.android.support:multidex:1.0.0'
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
