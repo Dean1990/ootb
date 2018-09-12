@@ -1,3 +1,7 @@
+#### **该项目停止维护**
+
+由于项目一直在引用添加第三方包，变的越来越大，而且有一部分包是新项目用不到的，违背了当初的开始这个项目的初衷。我把最初的一部分代码和积累下来的工具类提取出来，开始了一个新项目 [OotbLite](https://github.com/Dean1990/ootbLite) ，该项目不再会引用多余的第三方包，只提供参考。
+
 #### 简介
 
 这是一个Android开发的工具集合,或者叫CodeBase。  [![](https://jitpack.io/v/Dean1990/OOTB.svg)](https://jitpack.io/#Dean1990/OOTB)
@@ -97,8 +101,6 @@ public void onCreate() {
   }
   ```
 
-  
-
 - Rajava需要在app 的 build.gradle文件设置 `packagingOptions {exclude 'META-INF/rxjava.properties'}`
 
   ```groovy
@@ -108,7 +110,6 @@ public void onCreate() {
   }
   ```
 
-  
 
 以上内容就可以正常使用OOTB，以下为扩展
 
@@ -353,6 +354,7 @@ new TestReq(this,1).execute(new Request.RequestCallback<Entity>() {
   * PersistenceUtils.java（持久化操作,有时感觉这个类有点鸡肋）
 
 * entity
+
   * BaseEntiy.java（基础实体类）
 
 * manager
@@ -389,50 +391,65 @@ OotbConfig.java（配置文件，使用ootb需要先调用该类中的init函数
 #### 引用
 
 >'org.xutils:xutils:3.5.0'
+>
 >>感谢xUtils，多年来一直在用这个框架，所以这个工具有很大一部分功能是对xUtils的再包装。
 
 >'com.alibaba:fastjson:1.2.41'
+>
 >>JSON操作
 
 >'com.github.bumptech.glide:glide:3.7.0'
+>
 >>图片加载
 
 >'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
 >'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+>
 >>以上两个用来权限申请
 
 >'com.github.PhilJay:MPAndroidChart:v3.0.2'
+>
 >>图表绘制
 
 >'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
+>
 >>扫码包装
 
 >'cn.bingoogolapple:bga-zbar:1.1.7@aar'
+>
 >>扫码zbar核心
 
 >'cn.bingoogolapple:bga-zxing:1.1.7@aar'
+>
 >>扫码zxing核心
 
 >'org.greenrobot:eventbus:3.0.0'
+>
 >>消息传递
 
 >'q.rorbin:VerticalTabLayout:1.2.5'
+>
 >>竖向的TabLayout
 
 >'com.zhy:flowlayout-lib:1.0.3'
+>
 >>横向流式布局
 
 >'se.emilsjolander:stickylistheaders:2.7.0'
+>
 >>带标题(header)悬停的ListView
 
 >'com.github.Dean1990:BothwayListview:-SNAPSHOT'
+>
 >>双向滑动的ListView
 
 >'com.belerweb:pinyin4j:2.5.1'
+>
 >>拼音相关
 
 >'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+>
 >>上下拉加载
 
 >'org.jsoup:jsoup:1.11.3'
